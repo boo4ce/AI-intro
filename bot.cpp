@@ -11,7 +11,7 @@ Bot::~Bot() {
 
 }
 
-void Bot::findWayByDFS() {
+const void Bot::findWayByDFS() {
     deque.push_back(ii(this->x, this->y));
     int i;
 
@@ -35,29 +35,29 @@ void Bot::findWayByDFS() {
     }
 }
 
-void Bot::findWayByBFS() {
+const void Bot::findWayByBFS() {
 
 }
 
-void Bot::findWayByIDS() {
+const void Bot::findWayByIDS() {
 
 }
 
-void Bot::recognizeWall(int x, int y) {
+const void Bot::recognizeWall(int x, int y) {
     this->mazeMem[x][y] = Maze::WALL;
 }
 
-void Bot::recognizeWay(int x, int y) {
+const void Bot::recognizeWay(int x, int y) {
     this->mazeMem[x][y] = Maze::WAY;
 }
 
-void Bot::moveTo(int x, int y) {
+const void Bot::moveTo(int x, int y) {
     if(this->mazeMem[x][y] != Maze::WALL) {
         this->x = x;
         this->y = y;
     }
 }
 
-void Bot::see(int x, int y, short kindOfObject) {
+const void Bot::see(int x, int y, short kindOfObject) {
     this->mazeMem[x][y] = kindOfObject;
 }

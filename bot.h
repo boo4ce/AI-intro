@@ -20,23 +20,23 @@ private:
     short mazeMem[100][100];
 
     // direct
-    short verticalMove[4] = {0, 0, -1, 1};
-    short horizontalMove[4] = {-1, 1, 0, 0};
+    const short verticalMove[4] = {0, 0, -1, 1};
+    const short horizontalMove[4] = {-1, 1, 0, 0};
     
 public:
     Bot(int x, int y);
     ~Bot();
 
-    void moveTo(int x, int y);
+    const void moveTo(int x, int y);
 
 public:
-    void findWayByDFS();
-    void findWayByBFS();
-    void findWayByIDS();
-    inline ii getCoordinate() {return ii(this->x, this->y);};
-    inline void setFirstCoordinate(int x, int y) { this-> x = x; this->y = y; };
-    void recognizeWall(int x, int y);
-    void recognizeWay(int x, int y); 
-    void see(int x, int y, short kindOfObject);
-    inline void tick() {this->mazeMem[x][y] = Bot::TRACK; };
+    const void findWayByDFS();
+    const void findWayByBFS();
+    const void findWayByIDS();
+    const inline ii getCoordinate() const {return ii(this->x, this->y);};
+    const inline void setFirstCoordinate (int x, int y) { this-> x = x; this->y = y; };
+    const void recognizeWall(int x, int y);
+    const void recognizeWay(int x, int y); 
+    const void see(int x, int y, short kindOfObject);
+    const inline void tick() {this->mazeMem[x][y] = Bot::TRACK; };
 };
