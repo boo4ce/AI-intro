@@ -24,11 +24,4 @@ public abstract class DemoObject extends JPanel {
        
         this.setBackground(Color.BLACK);
     }
-    
-    DemoObject(int x, int y, int width, int height, Color color) {
-        super.setLocation(y, x);      
-        super.setSize(width, height);
-       
-        this.setBackground(color);
-    }
 }

@@ -10,24 +10,15 @@ package entity;
  * @author acer
  */
 public class Maze {
-    private Bot bot;
-    private Goal goal;
     protected short[][] maze;
     
-    public Bot getBot() {
-        return bot;
+    public Maze() {
+        
     }
-
-    public void setBot(Bot bot) {
-        this.bot = bot;
-    }
-
-    public Goal getGoal() {
-        return goal;
-    }
-
-    public void setGoal(Goal goal) {
-        this.goal = goal;
+    
+    public Maze(int row, int column) {
+        maze = new short[row][column];
+        setDefault(row, column);
     }
 
     public short[][] getMaze() {
@@ -48,5 +39,11 @@ public class Maze {
     
     public short getKindOfObject(int x, int y) {
         return this.maze[x][y];
+    }
+    
+    private void setDefault(int width, int height) {
+        for(int i = 0; i < width; i++)
+            for(int j = 0; j < height; j++)
+                maze[i][j] = DemoObject.WAY;
     }
 }

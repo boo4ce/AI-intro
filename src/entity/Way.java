@@ -16,6 +16,7 @@ public class Way extends DemoObject{
     }
     
     private void init() {
+        this.setBorder(javax.swing.BorderFactory.createLineBorder(Color.GRAY));
         this.setForeground(Color.WHITE);
         this.setBackground(Color.WHITE);
     }

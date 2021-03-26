@@ -5,7 +5,7 @@
  */
 package main;
 
-import view.MazeView;
+import view.*;
 
 /**
  *
@@ -32,9 +32,12 @@ public class main {
         };
         
         
-        MazeView mazeView = new MazeView(400, 400, 10, 10, mazeDetail);
+        MazeView mazeView = new MazeView(400, 400, 10, 10);
         mazeView.findGoal();
-        mazeView.showMaze();
+        
+        ControlView control = new ControlView();
+        control.init(mazeView);
+        control.run();
     }
     
 }
