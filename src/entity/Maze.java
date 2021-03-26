@@ -10,7 +10,25 @@ package entity;
  * @author acer
  */
 public class Maze {
+    private Bot bot;
+    private Goal goal;
     protected short[][] maze;
+    
+    public Bot getBot() {
+        return bot;
+    }
+
+    public void setBot(Bot bot) {
+        this.bot = bot;
+    }
+
+    public Goal getGoal() {
+        return goal;
+    }
+
+    public void setGoal(Goal goal) {
+        this.goal = goal;
+    }
 
     public short[][] getMaze() {
         return maze;

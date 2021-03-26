@@ -5,7 +5,7 @@
  */
 package view;
 import entity.*;
-import java.awt.BorderLayout;
+import java.awt.Color;
 /**
  *
  * @author acer
@@ -59,18 +59,29 @@ public class MazeView extends javax.swing.JFrame{
     }
     
     public final void showMaze() {
-        short[][] mazeInfo;
-        mazeInfo = this.maze.getMaze();
+        short[][] mazeInfo = this.maze.getMaze();
         for(int i = 0; i < rows; i++) {
-            for(int j = 0; j < columns; i++) {
+            for(int j = 0; j < columns; j++) {
                 switch(mazeInfo[i][j]) {
-                    case DemoObject.WALL -> mazePanel.add(new Wall(box_height*i, box_width*j, box_width, box_height));
-                    case DemoObject.WAY -> mazePanel.add(new Way(box_height*i, box_width*j, box_width, box_height));
-                    default -> {
-                    }
+                    case DemoObject.WALL: 
+                        mazePanel.add(new Wall(box_height*i, box_width*j, box_width, box_height));
+                        break;                          
+                    case DemoObject.BOT:
+                        mazePanel.add(new Way(box_height*i, box_width*j, box_width, box_height));
+                        maze.setBot(new Bot(box_height*i, box_width*j, box_width, box_height, 5));
+                        break;
+                    case DemoObject.GOAL:
+                        maze.setGoal(new Goal(box_height*i, box_width*j, box_width, box_height, 5));
+                    case DemoObject.WAY: 
+                        mazePanel.add(new Way(box_height*i, box_width*j, box_width, box_height));
+                        break;
+                    default:
                 }
             }
         }
+        
+//        mazePanel.add(maze.getBot());
+//        mazePanel.add(maze.getGoal());
     }
     
     public final void findGoal() {
