@@ -10,7 +10,7 @@ package entity;
  * @author acer
  */
 public class Maze {
-    private short[][] maze;
+    protected short[][] maze;
 
     public short[][] getMaze() {
         return maze;

@@ -59,7 +59,8 @@ public class MazeView extends javax.swing.JFrame{
     }
     
     public final void showMaze() {
-        short[][] mazeInfo = this.maze.getMaze();
+        short[][] mazeInfo;
+        mazeInfo = this.maze.getMaze();
         for(int i = 0; i < rows; i++) {
             for(int j = 0; j < columns; i++) {
                 switch(mazeInfo[i][j]) {
