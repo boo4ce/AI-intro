@@ -21,12 +21,19 @@ import javax.swing.BorderFactory;
  * @author acer
  */
 public class Bot extends DemoObject{
+    public static final short LEFT = 1;
+    public static final short UP = 2;
+    public static final short RIGHT = 3;
+    public static final short DOWN = 4;
+    
     private BufferedImage image;
-    private int padding;
+    private short[][] memory;
     
     public Bot(int x, int y, int width, int height, int padding) {
-        super(x + padding, y + padding, width - padding*2, height - padding*2);
-        this.padding = padding;
+        super(x, y, width, height, padding);
+        
+        memory = new short[100][100];
+        
         init();
     }
     
@@ -49,20 +56,45 @@ public class Bot extends DemoObject{
         g.drawImage(image.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_SMOOTH), 0, 0, this); // see javadoc for more info on the parameters     
     }
     
-    public final void moveUp() {
-        this.setLocation(this.getX(), this.getY() - this.getHeight() + 2*padding);
+    private void moveUp() {
+        this.yMaze -= 1;
     }
-    public final void moveDown() {
-        this.setLocation(this.getX(), this.getY() + this.getHeight() + 2*padding);
+    private void moveDown() {
+        this.yMaze += 1;
     }
-    public final void moveLeft() {
-        this.setLocation(this.getX() - this.getWidth() + 2*padding, this.getY());
+    private void moveLeft() {
+        this.xMaze -= 1;
     }
-    public final void moveRight() {
-        this.setLocation(this.getX() + this.getWidth() + 2*padding, this.getY());
+    private void moveRight() {
+        this.xMaze += 1;
     }
     
-    public void findWayByDFS() {
-       
+    public void move(short direction) {
+        memory[yMaze][xMaze] = DemoObject.WAY;
+        switch(direction) {
+            case LEFT: 
+                moveLeft();
+                break;
+            case RIGHT:
+                moveRight();
+                break;
+            case UP:
+                moveUp();
+                break;
+            case DOWN:
+                moveDown();
+                break;
+            default:
+        }
+        memory[yMaze][xMaze] = DemoObject.BOT;
+        this.display();
     }
+    
+    public void see(short left, short top, short right, short bottom) {
+        memory[yMaze][xMaze-1] = left;
+        memory[yMaze][xMaze+1] = right;
+        memory[yMaze-1][xMaze] = top;
+        memory[yMaze+1][xMaze-1] = bottom;
+    }
+    
 }

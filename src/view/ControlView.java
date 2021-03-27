@@ -5,6 +5,8 @@
  */
 package view;
 
+import entity.Bot;
+
 /**
  *
  * @author acer
@@ -117,7 +119,7 @@ public class ControlView extends javax.swing.JFrame {
 
     private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
         // TODO add your handling code here:
-        maze.getProcess().getBot().moveDown();
+        maze.getProcess().getBot().move(Bot.DOWN);
     }//GEN-LAST:event_startButtonActionPerformed
 
     private void changeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeButtonActionPerformed

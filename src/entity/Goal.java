@@ -23,7 +23,7 @@ public class Goal extends DemoObject{
     private BufferedImage image;
     
     public Goal(int x, int y, int width, int height, int padding) {
-        super(x + padding, y + padding, width - padding*2, height - padding*2);
+        super(x, y, width, height, padding);
         init();
     }
     

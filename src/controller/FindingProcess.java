@@ -5,12 +5,13 @@
  */
 package controller;
 import entity.*;
-
+import java.util.Queue;
+import java.util.Stack;
 /**
  *
  * @author acer
  */
-public class FindingProcess {
+public class FindingProcess implements Runnable{
     private Maze maze;
     private Bot bot;
     private Goal goal;
@@ -43,5 +44,21 @@ public class FindingProcess {
         this.goal = goal;
     }
     
-    
+    public void findWayByDFS() {
+        Stack<Pair<Integer, Integer> > stack = new Stack<>();
+        stack.push(new Pair<>(bot.getxMaze(), bot.getyMaze()));
+        
+        while(!stack.empty()) {
+            Pair<Integer, Integer> current = stack.peek();
+            stack.pop();
+            
+            
+            
+        }
+    }
+
+    @Override
+    public void run() {
+        
+    }
 }

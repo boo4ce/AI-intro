@@ -17,23 +17,58 @@ public abstract class DemoObject extends JPanel {
     public final static short BOT = 4;
     public final static short GOAL = 5;
     
-    int width, height;
+    int xMaze, yMaze, width, height;
+    private final int padding;
     
-    DemoObject(int x, int y, int width, int height) {
-        super.setLocation(x, y);      
+    DemoObject(int xMaze, int yMaze, int width, int height) {
         super.setSize(width, height);
      
+        this.xMaze = xMaze;
+        this.yMaze = yMaze;
+        
+        padding = 0;
+        
         this.width = width;
         this.height = height;
+        
+        this.display(); 
+    }
+    
+    DemoObject(int xMaze, int yMaze, int width, int height, int padding) {
+        this.xMaze = xMaze;
+        this.yMaze = yMaze;
+        
+        this.padding = padding;
+        
+        this.width = width - 2*padding;
+        this.height = height - 2*padding;
+        
+        super.setSize(this.width, this.height);
+        
+        this.display();
     }
 
+    @Override
     public int getWidth() {
-        return width;
+        return this.width;
     }
 
+    @Override
     public int getHeight() {
-        return height;
+        return this.height;
+    }
+
+    
+    public int getxMaze() {
+        return this.xMaze;
+    }
+
+    public int getyMaze() {
+        return this.yMaze;
     }
     
-    
+    public final void display() {
+        this.setLocation(this.xMaze*(width + 2*padding) + padding, 
+                this.yMaze*(height + 2*padding) + padding);
+    }
 }
