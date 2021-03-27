@@ -110,6 +110,8 @@ public class Parameter extends javax.swing.JFrame {
             int row = Integer.parseInt(jTextField1.getText());
             int column = Integer.parseInt(jTextField2.getText());
             
+            if(row >= 100 && column >= 100) return;
+            
             if(row*column >= 900) unit_edge = edge_default/3;
             else if(row*column >= 400) unit_edge = edge_default/2;
             else unit_edge = edge_default;

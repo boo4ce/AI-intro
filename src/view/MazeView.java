@@ -85,18 +85,18 @@ public class MazeView extends javax.swing.JFrame{
             for(int j = 0; j < columns; j++) {
                 switch(mazeInfo[i][j]) {
                     case DemoObject.WALL: 
-                        mazePane.add(new Wall(box_height*i, box_width*j, box_width, box_height));
+                        mazePane.add(new Wall(box_height*j, box_width*i, box_width, box_height));
                         break;                          
                     case DemoObject.BOT:
-                        mazePane.add(new Way(box_height*i, box_width*j, box_width, box_height));
-                        process.setBot(new Bot(box_height*i, box_width*j, box_width, box_height, 5));
+                        mazePane.add(new Way(box_height*j, box_width*i, box_width, box_height));
+                        process.setBot(new Bot(box_height*j, box_width*i, box_width, box_height, 5));
                         break;
                     case DemoObject.GOAL:
-                        mazePane.add(new Way(box_height*i, box_width*j, box_width, box_height));
-                        process.setGoal(new Goal(box_height*i, box_width*j, box_width, box_height, 5));
+                        mazePane.add(new Way(box_height*j, box_width*i, box_width, box_height));
+                        process.setGoal(new Goal(box_height*j, box_width*i, box_width, box_height, 5));
                         break;
                     case DemoObject.WAY: 
-                        mazePane.add(new Way(box_height*i, box_width*j, box_width, box_height));
+                        mazePane.add(new Way(box_height*j, box_width*i, box_width, box_height));
                         break;
                     default:
                 }

@@ -17,22 +17,22 @@ public abstract class DemoObject extends JPanel {
     public final static short BOT = 4;
     public final static short GOAL = 5;
     
-    int width, heigth;
+    int width, height;
     
     DemoObject(int x, int y, int width, int height) {
-        super.setLocation(y, x);      
+        super.setLocation(x, y);      
         super.setSize(width, height);
      
         this.width = width;
-        this.heigth = height;
+        this.height = height;
     }
 
     public int getWidth() {
         return width;
     }
 
-    public int getHeigth() {
-        return heigth;
+    public int getHeight() {
+        return height;
     }
     
     
