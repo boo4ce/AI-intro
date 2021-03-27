@@ -47,6 +47,7 @@ public class ControlView extends javax.swing.JFrame {
         setResizable(false);
 
         startButton.setText("Start");
+        startButton.setFocusable(false);
         startButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 startButtonActionPerformed(evt);
@@ -54,16 +55,20 @@ public class ControlView extends javax.swing.JFrame {
         });
 
         stopButton.setText("Stop");
+        stopButton.setFocusable(false);
 
         resumeButton.setText("Resume");
+        resumeButton.setFocusable(false);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 100)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("0");
 
         resetButton.setText("Reset");
+        resetButton.setFocusable(false);
 
         changeButton.setText("Change");
+        changeButton.setFocusable(false);
         changeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 changeButtonActionPerformed(evt);

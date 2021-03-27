@@ -63,6 +63,6 @@ public class Bot extends DemoObject{
     }
     
     public void findWayByDFS() {
-        
+       
     }
 }
