@@ -16,7 +16,7 @@ public class ControlView extends javax.swing.JFrame {
      */
     public ControlView() {
         initComponents();
-        this.setLocation(MazeView.right + 100, MazeView.top - 50);
+        this.setLocation(MazeView.right + 100, MazeView.top + 100);
     }
     
     public void init(MazeView mazeView) {
@@ -112,6 +112,7 @@ public class ControlView extends javax.swing.JFrame {
 
     private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
         // TODO add your handling code here:
+        maze.getProcess().getBot().moveDown();
     }//GEN-LAST:event_startButtonActionPerformed
 
     private void changeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeButtonActionPerformed

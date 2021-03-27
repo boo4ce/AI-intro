@@ -11,7 +11,7 @@ import entity.*;
  * @author acer
  */
 public class MazeView extends javax.swing.JFrame{
-    public static int left = 200, top = 140;
+    public static int left = 300, top = 10;
     public static int right, bottom;
     
     private final int box_width, box_height;
@@ -53,7 +53,7 @@ public class MazeView extends javax.swing.JFrame{
         this.setLocation(left, top);
         
         mazePane = new javax.swing.JLayeredPane();
-
+        
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(mazePane);
@@ -70,12 +70,12 @@ public class MazeView extends javax.swing.JFrame{
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mazePane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(mazePane, 0, width, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mazePane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(mazePane, 0, height, Short.MAX_VALUE)
         );
-
+        
         pack();
     }
     
@@ -85,27 +85,31 @@ public class MazeView extends javax.swing.JFrame{
             for(int j = 0; j < columns; j++) {
                 switch(mazeInfo[i][j]) {
                     case DemoObject.WALL: 
-                        mazePane.add(new Wall(box_height*i, box_width*j, box_width, box_height), columns*i + j);
+                        mazePane.add(new Wall(box_height*i, box_width*j, box_width, box_height));
                         break;                          
                     case DemoObject.BOT:
-                        mazePane.add(new Way(box_height*i, box_width*j, box_width, box_height), columns*i + j);
+                        mazePane.add(new Way(box_height*i, box_width*j, box_width, box_height));
                         process.setBot(new Bot(box_height*i, box_width*j, box_width, box_height, 5));
                         break;
                     case DemoObject.GOAL:
+                        mazePane.add(new Way(box_height*i, box_width*j, box_width, box_height));
                         process.setGoal(new Goal(box_height*i, box_width*j, box_width, box_height, 5));
+                        break;
                     case DemoObject.WAY: 
-                        mazePane.add(new Way(box_height*i, box_width*j, box_width, box_height), columns*i + j);
+                        mazePane.add(new Way(box_height*i, box_width*j, box_width, box_height));
                         break;
                     default:
                 }
             }
         }
-        
+
         try {
-            mazePane.add(process.getBot());
-            mazePane.add(process.getGoal());
+            mazePane.setLayer(process.getBot(), 1, -1);
+            mazePane.add(process.getBot()); 
+            mazePane.setLayer(process.getGoal(), 1, -1);
+            mazePane.add(process.getGoal());  
         } catch(Exception e) {
-            System.out.println("Haven't init bot and goal yet");
+            System.out.println(e);
         }
     }
     

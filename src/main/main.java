@@ -32,7 +32,7 @@ public class main {
         };
         
         
-        MazeView mazeView = new MazeView(400, 400, 10, 10);
+        MazeView mazeView = new MazeView(600, 600, 10, 10, mazeDetail);
         mazeView.findGoal();
         
         ControlView control = new ControlView();

@@ -5,7 +5,6 @@
  */
 package entity;
 
-import java.awt.Color;
 import javax.swing.JPanel;
 
 /**
@@ -18,10 +17,23 @@ public abstract class DemoObject extends JPanel {
     public final static short BOT = 4;
     public final static short GOAL = 5;
     
+    int width, heigth;
+    
     DemoObject(int x, int y, int width, int height) {
         super.setLocation(y, x);      
         super.setSize(width, height);
-       
-        this.setBackground(Color.BLACK);
+     
+        this.width = width;
+        this.heigth = height;
     }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeigth() {
+        return heigth;
+    }
+    
+    
 }

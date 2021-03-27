@@ -10,6 +10,8 @@ package view;
  * @author acer
  */
 public class Parameter extends javax.swing.JFrame {
+    private final int edge_default = 60;
+    private int unit_edge;
     private MazeView maze;
     /**
      * Creates new form Parameter
@@ -107,7 +109,12 @@ public class Parameter extends javax.swing.JFrame {
         if(jTextField1.getText().matches("\\d+") && jTextField2.getText().matches("\\d+")) {
             int row = Integer.parseInt(jTextField1.getText());
             int column = Integer.parseInt(jTextField2.getText());
-            this.maze = maze.cloneNew(row*40, column*40, row, column);
+            
+            if(row*column >= 900) unit_edge = edge_default/3;
+            else if(row*column >= 400) unit_edge = edge_default/2;
+            else unit_edge = edge_default;
+            
+            this.maze = maze.cloneNew(column*unit_edge, row*unit_edge, row, column);
             this.maze.findGoal();
         }
     }//GEN-LAST:event_jButton2ActionPerformed
