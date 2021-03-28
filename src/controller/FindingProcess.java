@@ -6,11 +6,13 @@
 package controller;
 import entity.Bot;
 import entity.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import view.MazeView;
 /**
  *
  * @author acer
@@ -66,10 +68,10 @@ public class FindingProcess implements Runnable{
                 top = DemoObject.UNKNOWN, bottom = DemoObject.UNKNOWN;
         
         int current_x, current_y;
-        short orient;
+        List<Short> orient = new ArrayList<>();
+        Random random = new Random();
         
         while(!stack.empty()) {
-            orient = -1;
             Pair<Integer, Integer> current = stack.peek();
             
             current_x = current.getFirst();
@@ -112,28 +114,49 @@ public class FindingProcess implements Runnable{
             
             //
             if(left == DemoObject.WAY) {
-                stack.push(new Pair<>(current_x-1, current_y));
-                orient = Bot.LEFT;
-            } else if(right == DemoObject.WAY) {
-                stack.push(new Pair<>(current_x+1, current_y));
-                orient = Bot.RIGHT;
-            } else if(top == DemoObject.WAY) {
-                stack.push(new Pair<>(current_x, current_y-1));
-                orient = Bot.UP;
-            } else if(bottom == DemoObject.WAY) {
-                stack.push(new Pair<>(current_x, current_y+1));
-                orient = Bot.DOWN;
+//                stack.push(new Pair<>(current_x-1, current_y));
+                orient.add(Bot.LEFT);
+            } 
+            if(right == DemoObject.WAY) {
+//                stack.push(new Pair<>(current_x+1, current_y));
+                orient.add(Bot.RIGHT);
+            } 
+            if(top == DemoObject.WAY) {
+//                stack.push(new Pair<>(current_x, current_y-1));
+                orient.add(Bot.UP);
+            } 
+            if(bottom == DemoObject.WAY) {
+//                stack.push(new Pair<>(current_x, current_y+1));
+                orient.add(Bot.DOWN);
             }
             
-            if(orient != -1) {
-                bot.move(orient);
-                directList.push(orient);
+            if(!orient.isEmpty()) {
+                short direction = orient.get(Math.abs(random.nextInt())%orient.size());
+                
+                switch(direction) {
+                    case Bot.UP:
+                        stack.push(new Pair<>(current_x, current_y-1));
+                        break;
+                    case Bot.DOWN:
+                        stack.push(new Pair<>(current_x, current_y+1));
+                        break;
+                    case Bot.RIGHT:
+                        stack.push(new Pair<>(current_x+1, current_y));
+                        break;
+                    case Bot.LEFT:
+                        stack.push(new Pair<>(current_x-1, current_y));
+                        break;
+                }
+                
+                bot.move(direction);
+                directList.push(direction);
             } else {
                 stack.pop();
                 bot.reverseMove(directList.peek());
                 directList.pop();
             }
             
+            orient.clear();
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
