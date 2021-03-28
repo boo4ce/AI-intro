@@ -69,7 +69,7 @@ public class Bot extends DemoObject{
         this.xMaze += 1;
     }
     
-    public void move(short direction) {
+    public final void move(short direction) {
         memory[yMaze][xMaze] = DemoObject.WAY;
         switch(direction) {
             case LEFT: 
@@ -90,11 +90,15 @@ public class Bot extends DemoObject{
         this.display();
     }
     
-    public void see(short left, short top, short right, short bottom) {
+    public final void see(short left, short top, short right, short bottom) {
         memory[yMaze][xMaze-1] = left;
         memory[yMaze][xMaze+1] = right;
         memory[yMaze-1][xMaze] = top;
         memory[yMaze+1][xMaze-1] = bottom;
     }
     
+    public final void setCoor(int x, int y) {
+        this.xMaze = x;
+        this.yMaze = y;
+    }
 }

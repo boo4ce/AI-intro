@@ -16,6 +16,8 @@ public class FindingProcess implements Runnable{
     private Bot bot;
     private Goal goal;
 
+    private int firstBotX, firstBotY;
+    
     public FindingProcess() {
         maze = new Maze();
     }
@@ -34,6 +36,8 @@ public class FindingProcess implements Runnable{
 
     public void setBot(Bot bot) {
         this.bot = bot;
+        this.firstBotX = bot.getxMaze();
+        this.firstBotY = bot.getyMaze();
     }
 
     public Goal getGoal() {
@@ -57,6 +61,14 @@ public class FindingProcess implements Runnable{
         }
     }
 
+    public void a() {
+        bot.move(Bot.DOWN);
+    } 
+    
+    public void reset() {
+        this.bot.setCoor(firstBotX, firstBotY);
+    }
+    
     @Override
     public void run() {
         

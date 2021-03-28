@@ -20,7 +20,7 @@ public class MazeView extends javax.swing.JFrame{
     private javax.swing.JLayeredPane mazePane;
     private FindingProcess process;
     
-    public MazeView(int width, int height, int row, int column) {
+    public MazeView(int width, int height, int row, int column, String name) {
         rows = row;
         columns = column;
         box_width = width/column;
@@ -29,12 +29,12 @@ public class MazeView extends javax.swing.JFrame{
         right = left + width;
         bottom = top + height;
         
-        initComponents(width, height);
+        initComponents(width, height, name);
         process = new FindingProcess();
         process.setMaze(new Maze(row, column));
     }
     
-    public MazeView(int width, int height, int row, int column, short[][] mazeDetail) {
+    public MazeView(int width, int height, int row, int column, short[][] mazeDetail, String name) {
         rows = row;
         columns = column;
         box_width = width/column;
@@ -43,14 +43,15 @@ public class MazeView extends javax.swing.JFrame{
         right = left + width;
         bottom = top + height;
         
-        initComponents(width, height);
+        initComponents(width, height, name);
         process = new FindingProcess();
         process.getMaze().setMaze(mazeDetail);
     }
     
-    private void initComponents(int width, int height) {
+    private void initComponents(int width, int height, String name) {
 //        this.setResizable(false);
         this.setLocation(left, top);
+        this.setTitle(name);
         
         mazePane = new javax.swing.JLayeredPane();
         
@@ -122,10 +123,7 @@ public class MazeView extends javax.swing.JFrame{
         return this.process;
     }
     
-    public final MazeView cloneNew(int width, int height, int row, int column) {
-        this.setVisible(false);
-        this.dispose();
-        
-        return new MazeView(width, height, row, column);
+    public final void reset() {
+        this.process.reset();
     }
 }
