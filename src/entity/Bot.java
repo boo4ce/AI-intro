@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import neuron.Memory;
 
 /**
  *
@@ -27,12 +28,12 @@ public class Bot extends DemoObject{
     public static final short DOWN = 4;
     
     private BufferedImage image;
-    private short[][] memory;
+    private final Memory memory;
     
     public Bot(int x, int y, int width, int height, int padding) {
         super(x, y, width, height, padding);
         
-        memory = new short[100][100];
+        memory = new Memory();
         
         init();
     }
@@ -58,19 +59,24 @@ public class Bot extends DemoObject{
     
     private void moveUp() {
         this.yMaze -= 1;
+        System.out.println("Up");
+        memory.moveUp();
     }
     private void moveDown() {
         this.yMaze += 1;
+        memory.moveDown();
     }
     private void moveLeft() {
         this.xMaze -= 1;
+        memory.moveLeft();
     }
     private void moveRight() {
         this.xMaze += 1;
+        memory.moveRight();
     }
     
     public final void move(short direction) {
-        memory[yMaze][xMaze] = DemoObject.WAY;
+        memory.set(DemoObject.UNKNOWN);
         switch(direction) {
             case LEFT: 
                 moveLeft();
@@ -86,15 +92,12 @@ public class Bot extends DemoObject{
                 break;
             default:
         }
-        memory[yMaze][xMaze] = DemoObject.BOT;
+        memory.set(DemoObject.BOT);
         this.display();
     }
     
     public final void see(short left, short top, short right, short bottom) {
-        memory[yMaze][xMaze-1] = left;
-        memory[yMaze][xMaze+1] = right;
-        memory[yMaze-1][xMaze] = top;
-        memory[yMaze+1][xMaze-1] = bottom;
+        memory.addAroundNode(left, right, top, bottom);    
     }
     
     public final void setCoor(int x, int y) {

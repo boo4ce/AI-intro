@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package view;
+import entity.Bot;
 import controller.FindingProcess;
 import entity.*;
 /**
@@ -30,7 +31,7 @@ public class MazeView extends javax.swing.JFrame{
         bottom = top + height;
         
         initComponents(width, height, name);
-        process = new FindingProcess();
+        process = new FindingProcess(name);
         process.setMaze(new Maze(row, column));
     }
     
@@ -44,8 +45,8 @@ public class MazeView extends javax.swing.JFrame{
         bottom = top + height;
         
         initComponents(width, height, name);
-        process = new FindingProcess();
-        process.getMaze().setMaze(mazeDetail);
+        process = new FindingProcess(name);
+        process.getMaze().setMaze(10, 10, mazeDetail);
     }
     
     private void initComponents(int width, int height, String name) {
@@ -55,7 +56,7 @@ public class MazeView extends javax.swing.JFrame{
         
         mazePane = new javax.swing.JLayeredPane();
         
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(mazePane);
         mazePane.setLayout(jPanel2Layout);

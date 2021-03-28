@@ -11,12 +11,16 @@ package entity;
  */
 public class Maze {
     protected short[][] maze;
+    private int row, column;
     
     public Maze() {
         
     }
     
     public Maze(int row, int column) {
+        this.row = row;
+        this.column = column;
+        
         maze = new short[row][column];
         setDefault(row, column);
     }
@@ -25,8 +29,10 @@ public class Maze {
         return maze;
     }
 
-    public void setMaze(short[][] maze) {
+    public void setMaze(int row, int column, short[][] maze) {
         this.maze = maze;
+        this.row = row;
+        this.column = column;
     }
     
     public void resize(int row, int column) {
@@ -34,16 +40,24 @@ public class Maze {
     }
     
     public void change(int x, int y, short kindOfObject) {
-        this.maze[x][y] = kindOfObject;
+        this.maze[y][x] = kindOfObject;
     }
     
     public short getKindOfObject(int x, int y) {
-        return this.maze[x][y];
+        return this.maze[y][x];
     }
     
     private void setDefault(int width, int height) {
         for(int i = 0; i < width; i++)
             for(int j = 0; j < height; j++)
-                maze[i][j] = DemoObject.WAY;
+                maze[j][i] = DemoObject.WAY;
+    }
+    
+    public int getRow() {
+        return this.row;
+    }
+    
+    public int getColumn() {
+        return this.column;
     }
 }

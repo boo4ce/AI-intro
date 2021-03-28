@@ -16,11 +16,12 @@ public abstract class DemoObject extends JPanel {
     public final static short WAY = 3;
     public final static short BOT = 4;
     public final static short GOAL = 5;
+    public final static short UNKNOWN = 6;
     
-    int xMaze, yMaze, width, height;
+    protected int xMaze, yMaze, width, height;
     private final int padding;
     
-    DemoObject(int xMaze, int yMaze, int width, int height) {
+    protected DemoObject(int xMaze, int yMaze, int width, int height) {
         super.setSize(width, height);
      
         this.xMaze = xMaze;
@@ -34,7 +35,7 @@ public abstract class DemoObject extends JPanel {
         this.display(); 
     }
     
-    DemoObject(int xMaze, int yMaze, int width, int height, int padding) {
+    protected DemoObject(int xMaze, int yMaze, int width, int height, int padding) {
         this.xMaze = xMaze;
         this.yMaze = yMaze;
         

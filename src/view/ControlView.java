@@ -156,8 +156,11 @@ public class ControlView extends javax.swing.JFrame {
     private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
         // TODO add your handling code here:
         running = true;
-        for(MazeView mv : mazes) 
-            mv.getProcess().a();
+        for(MazeView mv : mazes) {
+//            mv.getProcess().getBot().see((short)3, (short)3, (short)3, (short)3);
+//            mv.getProcess().getBot().move(Bot.UP);
+            new Thread(mv.getProcess()).start();
+        }
     }//GEN-LAST:event_startButtonActionPerformed
 
     private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtonActionPerformed
