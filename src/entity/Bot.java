@@ -59,7 +59,6 @@ public class Bot extends DemoObject{
     
     private void moveUp() {
         this.yMaze -= 1;
-        System.out.println("Up");
         memory.moveUp();
     }
     private void moveDown() {
@@ -73,6 +72,27 @@ public class Bot extends DemoObject{
     private void moveRight() {
         this.xMaze += 1;
         memory.moveRight();
+    }
+    
+    public final void reverseMove(short direction) {
+        memory.set(DemoObject.UNKNOWN);
+        switch(direction) {
+            case LEFT: 
+                moveRight();
+                break;
+            case RIGHT:
+                moveLeft();
+                break;
+            case UP:
+                moveDown();
+                break;
+            case DOWN:
+                moveUp();
+                break;
+            default:
+        }
+        memory.set(DemoObject.BOT);
+        this.display();
     }
     
     public final void move(short direction) {
@@ -103,5 +123,9 @@ public class Bot extends DemoObject{
     public final void setCoor(int x, int y) {
         this.xMaze = x;
         this.yMaze = y;
+    }
+    
+    public void getKind() {
+        System.out.println(memory.getKindOfCurrentNode());
     }
 }

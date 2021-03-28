@@ -44,7 +44,7 @@ public class Memory {
         }
         
         // new top node
-        if((tmpNode = searchNode(tmpX, tmpY - 1)) == null) {
+        if((tmpNode = searchNode(tmpX, tmpY + 1)) == null) {
             currentNode.addTop(kindOfLeftObject);
             memory.add(currentNode.top);
         } else {
@@ -52,7 +52,7 @@ public class Memory {
         }
         
         // new bottom node
-        if((tmpNode = searchNode(tmpX, tmpY + 1)) == null) {
+        if((tmpNode = searchNode(tmpX, tmpY - 1)) == null) {
             currentNode.addBottom(kindOfLeftObject);
             memory.add(currentNode.bottom);
         } else {
@@ -95,5 +95,9 @@ public class Memory {
     
     public final void moveDown() {
         currentNode = currentNode.bottom;
+    }
+    
+    public final short getKindOfCurrentNode() {
+        return currentNode.kindOfObject;
     }
 }

@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class ControlView extends javax.swing.JFrame {
     private final short[][] mazeDetail = {
-        {3, 3, 2, 2, 2, 2, 2, 3, 3, 3},
+        {3, 5, 2, 2, 2, 2, 2, 3, 3, 3},
         {3, 3, 2, 3, 3, 3, 3, 3, 2, 2},
         {2, 3, 2, 3, 2, 2, 2, 3, 3, 3},
         {2, 3, 2, 3, 3, 3, 3, 3, 2, 3},
@@ -24,7 +24,7 @@ public class ControlView extends javax.swing.JFrame {
         {2, 3, 2, 2, 2, 2, 2, 2, 2, 3},
         {2, 3, 3, 3, 2, 3, 3, 3, 3, 3},
         {2, 3, 2, 3, 2, 3, 2, 2, 2, 3},
-        {2, 2, 2, 4, 2, 5, 2, 3, 3, 3}
+        {2, 2, 2, 4, 2, 3, 2, 3, 3, 3}
     };
     
     private List<MazeView> mazes;
@@ -82,6 +82,11 @@ public class ControlView extends javax.swing.JFrame {
 
         resumeButton.setText("Resume");
         resumeButton.setFocusable(false);
+        resumeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resumeButtonActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 100)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -149,7 +154,8 @@ public class ControlView extends javax.swing.JFrame {
 
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
         // TODO add your handling code here:
-        mazes.add(new MazeView(400, 400, 10, 10, mazeDetail, algo.getSelectedItem().toString()));
+        short[][] tmp = mazeDetail.clone();
+        mazes.add(new MazeView(400, 400, 10, 10, tmp, algo.getSelectedItem().toString()));
         mazes.get(mazes.size()-1).findGoal();
     }//GEN-LAST:event_newButtonActionPerformed
 
@@ -165,14 +171,23 @@ public class ControlView extends javax.swing.JFrame {
 
     private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtonActionPerformed
         // TODO add your handling code here:
-        running = false;
+        for(MazeView mv : mazes) 
+            mv.getProcess().pause();
     }//GEN-LAST:event_stopButtonActionPerformed
 
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
         // TODO add your handling code here:
-        for(MazeView mv : mazes) 
-            mv.getProcess().reset();
+       mazes.clear();
     }//GEN-LAST:event_resetButtonActionPerformed
+
+    private void resumeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resumeButtonActionPerformed
+        // TODO add your handling code here:
+        for(MazeView mv : mazes) {
+            synchronized(mv.getProcess()) {
+                mv.getProcess().notifyAll();
+            }
+        }
+    }//GEN-LAST:event_resumeButtonActionPerformed
 
     /**
      * @param args the command line arguments

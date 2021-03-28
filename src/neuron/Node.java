@@ -62,7 +62,7 @@ public class Node {
     }
     
     void addTop(short kindOfObject) {
-        top = new Node(this.relativeX, this.relativeY-1, kindOfObject);
+        top = new Node(this.relativeX, this.relativeY+1, kindOfObject);
         this.top.bottom = this;
     }
     
@@ -72,7 +72,7 @@ public class Node {
     }
     
     void addBottom(short kindOfObject) {
-        bottom = new Node(this.relativeX, this.relativeY+1, kindOfObject);
+        bottom = new Node(this.relativeX, this.relativeY-1, kindOfObject);
         this.bottom.top = this;
     }
 }

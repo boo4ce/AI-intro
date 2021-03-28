@@ -10,6 +10,7 @@ import java.util.Queue;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import view.MazeView;
 /**
  *
  * @author acer
@@ -23,6 +24,7 @@ public class FindingProcess implements Runnable{
     private final String algoName;
     
     private boolean end = false;
+    private boolean stop = false;
     
     public FindingProcess(String algoName) {
         maze = new Maze();
@@ -57,23 +59,24 @@ public class FindingProcess implements Runnable{
     
     private void findWayByDFS() {
         Stack<Pair<Integer, Integer> > stack = new Stack<>();
+        Stack<Short> directList = new Stack<>();
+        
         stack.push(new Pair<>(bot.getxMaze(), bot.getyMaze()));
         short left = DemoObject.UNKNOWN, right = DemoObject.UNKNOWN, 
                 top = DemoObject.UNKNOWN, bottom = DemoObject.UNKNOWN;
         
         int current_x, current_y;
-        short orient = -1;
+        short orient;
         
         while(!stack.empty()) {
             orient = -1;
             Pair<Integer, Integer> current = stack.peek();
-            stack.pop();
             
             current_x = current.getFirst();
             current_y = current.getSecond();
             
             maze.change(current_x, current_y, DemoObject.UNKNOWN);
-            
+
             //left
             if(current.getFirst() == 0) left = DemoObject.WALL;
             else left = maze.getKindOfObject(current_x-1, current_y); 
@@ -88,36 +91,64 @@ public class FindingProcess implements Runnable{
             else bottom = maze.getKindOfObject(current_x, current_y+1);
             
             bot.see(left, top, right, bottom);
-           
-            System.out.println(left + " " + top + " " + right + " " + bottom);
             
+            // goal in 4 direction
+            if(left == DemoObject.GOAL) {
+                bot.move(Bot.LEFT);
+                break;
+            }
+            if(right == DemoObject.GOAL) {
+                bot.move(Bot.RIGHT);
+                break;
+            }
+            if(top == DemoObject.GOAL) {
+                bot.move(Bot.UP);
+                break;
+            }
+            if(bottom == DemoObject.GOAL) {
+                bot.move(Bot.DOWN);
+                break;
+            }
+            
+            //
             if(left == DemoObject.WAY) {
                 stack.push(new Pair<>(current_x-1, current_y));
                 orient = Bot.LEFT;
-            }
-            if(right == DemoObject.WAY) {
+            } else if(right == DemoObject.WAY) {
                 stack.push(new Pair<>(current_x+1, current_y));
                 orient = Bot.RIGHT;
-            }
-            if(top == DemoObject.WAY) {
+            } else if(top == DemoObject.WAY) {
                 stack.push(new Pair<>(current_x, current_y-1));
                 orient = Bot.UP;
-            }
-            if(bottom == DemoObject.WAY) {
+            } else if(bottom == DemoObject.WAY) {
                 stack.push(new Pair<>(current_x, current_y+1));
                 orient = Bot.DOWN;
             }
             
             if(orient != -1) {
                 bot.move(orient);
-                System.out.println("Move " + orient);
+                directList.push(orient);
+            } else {
+                stack.pop();
+                bot.reverseMove(directList.peek());
+                directList.pop();
             }
             
             try {
                 Thread.sleep(1000);
-                System.out.println("time");
             } catch (InterruptedException ex) {
                 Logger.getLogger(FindingProcess.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            if(stop) {
+                synchronized(this) {
+                    try {
+                        this.wait();
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(FindingProcess.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    this.stop = false;
+                }
             }
         }
         
@@ -143,4 +174,9 @@ public class FindingProcess implements Runnable{
             default:
         }
     }
+    
+    public void pause() {
+        this.stop = true;
+    }
+   
 }

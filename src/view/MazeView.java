@@ -50,7 +50,7 @@ public class MazeView extends javax.swing.JFrame{
     }
     
     private void initComponents(int width, int height, String name) {
-//        this.setResizable(false);
+        this.setResizable(false);
         this.setLocation(left, top);
         this.setTitle(name);
         
@@ -90,15 +90,15 @@ public class MazeView extends javax.swing.JFrame{
                         mazePane.add(new Wall(j, i, box_width, box_height));
                         break;                          
                     case DemoObject.BOT:
-                        mazePane.add(new Way(j, i, box_width, box_height));
+                        mazePane.add(new Way(j, i, box_width, box_height), rows*i + j);
                         process.setBot(new Bot(j, i, box_width, box_height, 5));
                         break;
                     case DemoObject.GOAL:
-                        mazePane.add(new Way(j, i, box_width, box_height));
+                        mazePane.add(new Way(j, i, box_width, box_height), rows*i + j);
                         process.setGoal(new Goal(j, i, box_width, box_height, 5));
                         break;
                     case DemoObject.WAY: 
-                        mazePane.add(new Way(j, i, box_width, box_height));
+                        mazePane.add(new Way(j, i, box_width, box_height), rows*i + j);
                         break;
                     default:
                 }
@@ -107,7 +107,7 @@ public class MazeView extends javax.swing.JFrame{
 
         try {
             mazePane.setLayer(process.getBot(), 1, -1);
-            mazePane.add(process.getBot()); 
+            mazePane.add(process.getBot());
             mazePane.setLayer(process.getGoal(), 1, -1);
             mazePane.add(process.getGoal());  
         } catch(Exception e) {
@@ -126,5 +126,9 @@ public class MazeView extends javax.swing.JFrame{
     
     public final void reset() {
         this.process.reset();
+    }
+    
+    public final void track(int i, int j) {
+        this.remove(i*rows + j);
     }
 }
