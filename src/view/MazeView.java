@@ -83,7 +83,7 @@ public class MazeView extends javax.swing.JFrame{
         pack();
     }
     
-    private final void showMaze() {
+    protected final void showMaze() {
         short[][] mazeInfo = this.process.getMaze().getMaze();
         for(int i = 0; i < rows; i++) {
             for(int j = 0; j < columns; j++) {
@@ -113,7 +113,7 @@ public class MazeView extends javax.swing.JFrame{
             mazePane.setLayer(process.getGoal(), 1, -1);
             mazePane.add(process.getGoal());  
         } catch(Exception e) {
-            System.out.println(e);
+            System.out.println(this.getClass().toString() + " create bot and flag " + e);
         }
     }
     

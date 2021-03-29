@@ -35,6 +35,12 @@ public class Maze {
         this.column = column;
     }
     
+    public void setMaze(int row, int column) {
+        this.row = row;
+        this.column = column;
+        this.maze = new Maze(row, column).getMaze();
+    }
+    
     public void resize(int row, int column) {
         this.maze = new short[row][column];
     }
@@ -47,10 +53,10 @@ public class Maze {
         return this.maze[y][x];
     }
     
-    private void setDefault(int width, int height) {
-        for(int i = 0; i < width; i++)
-            for(int j = 0; j < height; j++)
-                maze[j][i] = DemoObject.WAY;
+    private void setDefault(int row, int column) {
+        for(int i = 0; i < row; i++)
+            for(int j = 0; j < column; j++)
+                maze[i][j] = DemoObject.WAY;
     }
     
     public int getRow() {
@@ -59,5 +65,20 @@ public class Maze {
     
     public int getColumn() {
         return this.column;
+    }
+    
+    public static short[][] getMazeDefault() {
+        return new short[][] {
+            {3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
+            {3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
+            {3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
+            {3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
+            {3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
+            {3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
+            {3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
+            {3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
+            {3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
+            {3, 3, 3, 3, 3, 3, 3, 3, 3, 3}
+        };
     }
 }

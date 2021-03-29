@@ -26,6 +26,7 @@ public class ControlView extends javax.swing.JFrame  {
         {2, 2, 2, 4, 2, 5, 2, 3, 3, 3}
     };
     
+    private short[][] mazeEdit;
     private List<MazeView> mazes;
     protected boolean running = false;
     /**
@@ -33,8 +34,9 @@ public class ControlView extends javax.swing.JFrame  {
      */
     public ControlView() {
         initComponents();
-        this.setLocation(MazeView.right + 100, MazeView.top + 100);
         mazes = new ArrayList<>();
+        
+        mazeEdit = mazeDetail;
     }
     
 
@@ -50,14 +52,16 @@ public class ControlView extends javax.swing.JFrame  {
         newButton = new javax.swing.JButton();
         stopButton = new javax.swing.JButton();
         resumeButton = new javax.swing.JButton();
-        resetButton = new javax.swing.JButton();
+        edit = new javax.swing.JButton();
         startButton = new javax.swing.JButton();
         algo = new javax.swing.JComboBox<>();
+        jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Control");
         setAlwaysOnTop(true);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setLocation(new java.awt.Point(10, 30));
         setName("mainFrame"); // NOI18N
         setResizable(false);
 
@@ -85,11 +89,11 @@ public class ControlView extends javax.swing.JFrame  {
             }
         });
 
-        resetButton.setText("Clear");
-        resetButton.setFocusable(false);
-        resetButton.addActionListener(new java.awt.event.ActionListener() {
+        edit.setText("Edit");
+        edit.setFocusable(false);
+        edit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                resetButtonActionPerformed(evt);
+                editActionPerformed(evt);
             }
         });
 
@@ -107,25 +111,39 @@ public class ControlView extends javax.swing.JFrame  {
             }
         });
 
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 269, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(57, 57, 57)
+                .addGap(82, 82, 82)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(resetButton, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
-                    .addComponent(resumeButton, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
-                    .addComponent(stopButton, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
-                    .addComponent(newButton, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
+                    .addComponent(edit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(resumeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(stopButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(newButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(startButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(algo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(67, Short.MAX_VALUE))
+                    .addComponent(algo, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(90, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(196, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
                 .addComponent(newButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(startButton)
@@ -134,10 +152,10 @@ public class ControlView extends javax.swing.JFrame  {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(resumeButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(resetButton)
+                .addComponent(edit)
                 .addGap(18, 18, 18)
                 .addComponent(algo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40))
+                .addContainerGap())
         );
 
         pack();
@@ -149,7 +167,7 @@ public class ControlView extends javax.swing.JFrame  {
             if(mazes.get(i).isDispose()) 
                 mazes.remove(i);
         
-        short[][] tmp = mazeDetail.clone();
+        short[][] tmp = mazeEdit.clone();
         mazes.add(new MazeView(420, 420, 10, 10, tmp, algo.getSelectedItem().toString()));
         mazes.get(mazes.size()-1).findGoal();
     }//GEN-LAST:event_newButtonActionPerformed
@@ -170,10 +188,11 @@ public class ControlView extends javax.swing.JFrame  {
             mv.getProcess().pause();
     }//GEN-LAST:event_stopButtonActionPerformed
 
-    private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
+    private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
         // TODO add your handling code here:
-        System.out.println(mazes.size());
-    }//GEN-LAST:event_resetButtonActionPerformed
+        Parameter parameter = new Parameter();
+        parameter.run();
+    }//GEN-LAST:event_editActionPerformed
 
     private void resumeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resumeButtonActionPerformed
         // TODO add your handling code here:
@@ -225,8 +244,9 @@ public class ControlView extends javax.swing.JFrame  {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> algo;
+    private javax.swing.JButton edit;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JButton newButton;
-    private javax.swing.JButton resetButton;
     private javax.swing.JButton resumeButton;
     private javax.swing.JButton startButton;
     private javax.swing.JButton stopButton;

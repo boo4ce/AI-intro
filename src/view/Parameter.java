@@ -5,6 +5,8 @@
  */
 package view;
 
+import entity.Maze;
+
 /**
  *
  * @author acer
@@ -12,17 +14,16 @@ package view;
 public class Parameter extends javax.swing.JFrame {
     private final int edge_default = 60;
     private int unit_edge;
-    private MazeView maze;
+    private MazeView mazeView;
     /**
      * Creates new form Parameter
      */
     public Parameter() {
         initComponents();
-    }
-
-    public Parameter setMaze(MazeView maze) {
-        this.maze = maze;
-        return this;
+        jTextField1.setText("10");
+        jTextField2.setText("10");
+        mazeView = new MazeView(420, 420, 10, 10, "Edit");
+        mazeView.findGoal();
     }
     
     /**
@@ -41,7 +42,9 @@ public class Parameter extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setLocation(new java.awt.Point(800, 200));
+        setResizable(false);
 
         jLabel1.setText("Row");
 
@@ -61,6 +64,18 @@ public class Parameter extends javax.swing.JFrame {
             }
         });
 
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField1KeyReleased(evt);
+            }
+        });
+
+        jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField2KeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -69,10 +84,10 @@ public class Parameter extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(33, 33, 33)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(28, 28, 28)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
                             .addComponent(jTextField1)))
@@ -94,7 +109,7 @@ public class Parameter extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
@@ -106,19 +121,18 @@ public class Parameter extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        if(jTextField1.getText().matches("\\d+") && jTextField2.getText().matches("\\d+")) {
-            int row = Integer.parseInt(jTextField1.getText());
-            int column = Integer.parseInt(jTextField2.getText());
-            
-            if(row >= 100 && column >= 100) return;
-            
-            if(row*column >= 900) unit_edge = edge_default/3;
-            else if(row*column >= 400) unit_edge = edge_default/2;
-            else unit_edge = edge_default;
-            
-            this.maze = maze.cloneNew(column*unit_edge, row*unit_edge, row, column);
-            this.maze.findGoal();
-        }
+//        if(jTextField1.getText().matches("\\d+") && jTextField2.getText().matches("\\d+")) {
+//            int row = Integer.parseInt(jTextField1.getText());
+//            int column = Integer.parseInt(jTextField2.getText());
+//            
+//            if(row >= 100 && column >= 100) return;
+//            
+//            if(row*column >= 900) unit_edge = edge_default/3;
+//            else if(row*column >= 400) unit_edge = edge_default/2;
+//            else unit_edge = edge_default;
+//            
+//            this.maze.findGoal();
+//        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -126,6 +140,32 @@ public class Parameter extends javax.swing.JFrame {
         jTextField1.setText("");
         jTextField2.setText("");
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
+        // TODO add your handling code here:
+        if(jTextField2.getText().matches("\\d+") && jTextField1.getText().matches("\\d+")) {
+            int column = Integer.parseInt(jTextField2.getText());
+            int row = Integer.parseInt(jTextField1.getText());
+            if(column < 20 && row < 20) {
+                mazeView.dispose();
+                mazeView = new MazeView(40*column, 40*row, row, column, "Edit");
+                mazeView.findGoal();
+            }
+        }
+    }//GEN-LAST:event_jTextField1KeyReleased
+
+    private void jTextField2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyReleased
+        // TODO add your handling code here:
+        if(jTextField2.getText().matches("\\d+") && jTextField1.getText().matches("\\d+")) {
+            int column = Integer.parseInt(jTextField2.getText());
+            int row = Integer.parseInt(jTextField1.getText());
+            if(column < 20 && row < 20) {
+                mazeView.dispose();
+                mazeView = new MazeView(40*column, 40*row, row, column, "Edit");
+                mazeView.findGoal();
+            }
+        }
+    }//GEN-LAST:event_jTextField2KeyReleased
 
     /**
      * @param args the command line arguments
