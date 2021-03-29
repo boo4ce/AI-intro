@@ -125,9 +125,9 @@ public class MazeView extends javax.swing.JFrame{
         return this.process;
     }
     
-    public final void reset() {
-        this.process.reset();
-    }
+//    public final void reset() {
+//        this.process.reset();
+//    }
     
     public final JLayeredPane getPane() {
         return this.mazePane;

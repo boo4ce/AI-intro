@@ -94,7 +94,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="resetButton">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Reset"/>
+        <Property name="text" type="java.lang.String" value="Clear"/>
         <Property name="focusable" type="boolean" value="false"/>
       </Properties>
       <Events>
@@ -112,12 +112,16 @@
     <Component class="javax.swing.JComboBox" name="algo">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="2">
+          <StringArray count="3">
             <StringItem index="0" value="DFS"/>
-            <StringItem index="1" value="BFS"/>
+            <StringItem index="1" value="DFS-random"/>
+            <StringItem index="2" value="BFS"/>
           </StringArray>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="algoActionPerformed"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>

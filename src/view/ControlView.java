@@ -85,7 +85,7 @@ public class ControlView extends javax.swing.JFrame  {
             }
         });
 
-        resetButton.setText("Reset");
+        resetButton.setText("Clear");
         resetButton.setFocusable(false);
         resetButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -100,7 +100,12 @@ public class ControlView extends javax.swing.JFrame  {
             }
         });
 
-        algo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "DFS", "BFS" }));
+        algo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "DFS", "DFS-random", "BFS" }));
+        algo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                algoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -141,7 +146,7 @@ public class ControlView extends javax.swing.JFrame  {
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
         // TODO add your handling code here:
         short[][] tmp = mazeDetail.clone();
-        mazes.add(new MazeView(400, 400, 10, 10, tmp, algo.getSelectedItem().toString()));
+        mazes.add(new MazeView(420, 420, 10, 10, tmp, algo.getSelectedItem().toString()));
         mazes.get(mazes.size()-1).findGoal();
     }//GEN-LAST:event_newButtonActionPerformed
 
@@ -174,6 +179,10 @@ public class ControlView extends javax.swing.JFrame  {
             }
         }
     }//GEN-LAST:event_resumeButtonActionPerformed
+
+    private void algoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_algoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_algoActionPerformed
 
     /**
      * @param args the command line arguments
