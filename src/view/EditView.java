@@ -22,9 +22,10 @@ public class EditView extends javax.swing.JFrame {
     private int box_width = 40, box_height = 40;
     private JLayeredPane mazePane;
     private short[][] mazeInfo;
-    private int rows, columns;
+    private final int rows, columns;
     private short kindOfSelectedObject = DemoObject.WALL;
     private int pre_x_bot = -5, pre_y_bot, pre_x_goal = -5, pre_y_goal;
+    
     public EditView(int width, int height, int row, int column, String name) {
         initComponents(width, height, name);
         mazeInfo = new short[row][column];
@@ -86,7 +87,7 @@ public class EditView extends javax.swing.JFrame {
     protected final void showMaze() {
         for(int i = 0; i < rows; i++) {
             for(int j = 0; j < columns; j++) {
-                mazeInfo[j][i] = DemoObject.WAY;
+                mazeInfo[i][j] = DemoObject.WAY;
                 mazePane.add(new Way(j, i, box_width, box_height), rows*i + j);
             }
         }
@@ -137,6 +138,12 @@ public class EditView extends javax.swing.JFrame {
 
     public short[][] getMazeInfo() {
         return mazeInfo;
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose(); //To change body of generated methods, choose Tools | Templates.
+        this.mazePane.removeAll();
     }
     
     
