@@ -31,10 +31,14 @@ public class FindingProcess implements Runnable{
     private boolean end = false;
     private boolean stop = false;
     
+    private List<Pair<Integer, DemoObject>> list;
+    
     public FindingProcess(MazeView mazeView, String algoName) {
         maze = new Maze();
         this.algoName = algoName;
         this.mazeView = mazeView;
+        
+        list = new ArrayList<>();
     }
     
     public Maze getMaze() {
@@ -76,6 +80,7 @@ public class FindingProcess implements Runnable{
         short orient;
         
         while(!stack.empty()) {
+            if(end) return;
             orient = -1;
             Pair<Integer, Integer> current = stack.peek();
             
@@ -118,19 +123,23 @@ public class FindingProcess implements Runnable{
             }
             
             //
-            if(bot.getKinfOfTopObject() == DemoObject.WAY) {
+            if(bot.getKinfOfTopObject() == DemoObject.WAY 
+                    && bot.getTimeVisited(Bot.UP) == 0) {
                 stack.push(new Pair<>(current_x, current_y-1));
                 orient = Bot.UP;
             } 
-            else if(bot.getKinfOfLeftObject() == DemoObject.WAY) {
+            else if(bot.getKinfOfLeftObject() == DemoObject.WAY
+                    && bot.getTimeVisited(Bot.LEFT) == 0) {
                 stack.push(new Pair<>(current_x-1, current_y));
                 orient = Bot.LEFT;
             } 
-            else if(bot.getKinfOfRightObject() == DemoObject.WAY) {
+            else if(bot.getKinfOfRightObject() == DemoObject.WAY
+                    && bot.getTimeVisited(Bot.RIGHT) == 0) {
                 stack.push(new Pair<>(current_x+1, current_y));
                 orient = Bot.RIGHT;
             } 
-            else if(bot.getKinfOfBottomObject() == DemoObject.WAY) {
+            else if(bot.getKinfOfBottomObject() == DemoObject.WAY
+                    && bot.getTimeVisited(Bot.DOWN) == 0) {
                 stack.push(new Pair<>(current_x, current_y+1));
                 orient = Bot.DOWN;
             }
@@ -179,6 +188,7 @@ public class FindingProcess implements Runnable{
         Random random = new Random();
         
         while(!stack.empty()) {
+            if(end) return;
             Pair<Integer, Integer> current = stack.peek();
             
             current_x = current.getFirst();
@@ -220,19 +230,23 @@ public class FindingProcess implements Runnable{
             }
             
             //
-            if(bot.getKinfOfLeftObject() == DemoObject.WAY) {
+            if(bot.getKinfOfLeftObject() == DemoObject.WAY 
+                    && bot.getTimeVisited(Bot.LEFT) == 0) {
 //                stack.push(new Pair<>(current_x-1, current_y));
                 orient.add(Bot.LEFT);
             } 
-            if(bot.getKinfOfRightObject() == DemoObject.WAY) {
+            if(bot.getKinfOfRightObject() == DemoObject.WAY
+                    && bot.getTimeVisited(Bot.RIGHT) == 0) {
 //                stack.push(new Pair<>(current_x+1, current_y));
                 orient.add(Bot.RIGHT);
             } 
-            if(bot.getKinfOfTopObject() == DemoObject.WAY) {
+            if(bot.getKinfOfTopObject() == DemoObject.WAY
+                    && bot.getTimeVisited(Bot.UP) == 0) {
 //                stack.push(new Pair<>(current_x, current_y-1));
                 orient.add(Bot.UP);
             } 
-            if(bot.getKinfOfBottomObject() == DemoObject.WAY) {
+            if(bot.getKinfOfBottomObject() == DemoObject.WAY
+                    && bot.getTimeVisited(Bot.DOWN) == 0) {
 //                stack.push(new Pair<>(current_x, current_y+1));
                 orient.add(Bot.DOWN);
             }
@@ -298,6 +312,7 @@ public class FindingProcess implements Runnable{
         int current_x, current_y;
         
         while(!queue.isEmpty()) {
+            if(end) return;
             Pair<Integer, Integer> current = queue.peek();
             
             current_x = current.getFirst();
@@ -351,10 +366,13 @@ public class FindingProcess implements Runnable{
                 queue.add(new Pair<>(current_x, current_y+1));
             }
         }
+        
+        this.end = true;
     }
     
     @Override
     public void run() {
+        System.out.println("Hello");
         switch(this.algoName) {
             case "DFS":
                 this.findWayByDFS();
@@ -373,9 +391,32 @@ public class FindingProcess implements Runnable{
         this.stop = true;
     }
    
-    private void track() {   
-        DemoObject tmp = bot.track();
-        this.mazeView.getPane().setLayer(tmp, 1, -1);
-        this.mazeView.getPane().add(tmp);
+    private DemoObject search() {
+        for(Pair<Integer, DemoObject> pp : list) {
+            if(pp.getFirst() == getIndex()) {
+                return pp.getSecond();
+            }
+        }
+        
+        return null;
+    }
+    private void track() {
+        DemoObject tmp = search();
+        if(tmp == null) {
+            tmp = bot.track();
+            list.add(new Pair<>(getIndex(), tmp));
+            this.mazeView.getPane().setLayer(tmp, 1, this.getIndex());
+            this.mazeView.getPane().add(tmp);
+        }
+        else ((entity.Number)tmp).increase();
+    }
+    
+    private int getIndex() {
+        return this.bot.getxMaze()*maze.getColumn() + this.bot.getyMaze();
+    }
+    
+    public void clear() {
+        this.list.clear();
+        end = true;
     }
 }

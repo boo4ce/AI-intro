@@ -91,7 +91,6 @@ public class Bot extends DemoObject{
                 break;
             default:
         }
-        memory.set(DemoObject.BOT);
         this.display();
     }
     
@@ -111,7 +110,6 @@ public class Bot extends DemoObject{
                 break;
             default:
         }
-        memory.set(DemoObject.BOT);
         this.display();
     }
     
@@ -144,10 +142,13 @@ public class Bot extends DemoObject{
         return memory.getKindOfBottomNode();
     }
     
-    public DemoObject track() {
-        DemoObject res = new DemoObject(xMaze, yMaze, width+10, height+10) {
+    public Number track() {
+        Number res = new Number(xMaze, yMaze, width+10, height+10, this.memory.getTimeVisited()) {
         };
-        res.setColor(Color.CYAN);
         return res;
+    }
+    
+    public final int getTimeVisited(short direction) {
+        return this.memory.getTimeVisited(direction);
     }
 }

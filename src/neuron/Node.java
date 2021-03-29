@@ -17,6 +17,7 @@ public class Node {
     Node top;
     Node bottom;
     short kindOfObject;
+    private int timeVisit;
     final int relativeX, relativeY;
     
     Node(int relativeX, int relativeY) {
@@ -24,12 +25,14 @@ public class Node {
         this.relativeY = relativeY;
         
         kindOfObject = DemoObject.UNKNOWN;
+        timeVisit = 0;
     }
     
     Node(int relativeX, int relativeY, short kindOfObject) {
         this.relativeX = relativeX;
         this.relativeY = relativeY;
         this.kindOfObject = kindOfObject;
+        timeVisit = 0;
     }
     
     void set(short kindOfObject) {
@@ -74,5 +77,13 @@ public class Node {
     void addBottom(short kindOfObject) {
         bottom = new Node(this.relativeX, this.relativeY-1, kindOfObject);
         this.bottom.top = this;
+    }
+    
+    void visit() {
+        this.timeVisit++;
+    }
+    
+    int getTime() {
+        return this.timeVisit;
     }
 }

@@ -21,6 +21,7 @@ public class MazeView extends javax.swing.JFrame{
     
     private javax.swing.JLayeredPane mazePane;
     private FindingProcess process;
+    private boolean dispose = false;
     
     public MazeView(int width, int height, int row, int column, String name) {
         rows = row;
@@ -132,4 +133,18 @@ public class MazeView extends javax.swing.JFrame{
     public final JLayeredPane getPane() {
         return this.mazePane;
     }
+
+    @Override
+    public void dispose() {
+        super.dispose(); //To change body of generated methods, choose Tools | Templates.
+        process.clear();
+        this.mazePane.removeAll();
+        dispose = true;
+    }
+
+    public boolean isDispose() {
+        return dispose;
+    }
+    
+    
 }

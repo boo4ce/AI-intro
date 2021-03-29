@@ -20,7 +20,8 @@ public class Memory {
     
     public Memory() {
         memory = new ArrayList<>();
-        currentNode = new Node(0, 0, DemoObject.BOT);
+        currentNode = new Node(0, 0, DemoObject.WAY);
+        currentNode.visit();
     }
     
     public void addAroundNode(short kindOfLeftObject, short kindOfRightObject, 
@@ -83,23 +84,27 @@ public class Memory {
     }
     
     public final void moveLeft() {
-        currentNode.kindOfObject = Bot.VISITED;
+//        currentNode.kindOfObject = DemoObject.WAY;
         currentNode = currentNode.left;
+        currentNode.visit();
     }
     
     public final void moveRight() {
-        currentNode.kindOfObject = Bot.VISITED;
+//        currentNode.kindOfObject = DemoObject.WAY;
         currentNode = currentNode.right;
+        currentNode.visit();
     }
     
     public final void moveUp() {
-        currentNode.kindOfObject = Bot.VISITED;
+//        currentNode.kindOfObject = DemoObject.WAY;
         currentNode = currentNode.top;
+        currentNode.visit();
     }
     
     public final void moveDown() {
-        currentNode.kindOfObject = Bot.VISITED;
+//        currentNode.kindOfObject = DemoObject.WAY;
         currentNode = currentNode.bottom;
+        currentNode.visit();
     }
     
     public final short getKindOfCurrentNode() {
@@ -124,5 +129,23 @@ public class Memory {
     public final short getKindOfBottomNode() {
         if(currentNode.bottom == null) return DemoObject.UNKNOWN;
         return currentNode.bottom.kindOfObject;
+    }
+    
+    public final int getTimeVisited() {
+        return this.currentNode.getTime();
+    }
+    public final int getTimeVisited(short direction)  {
+        switch(direction) {
+            case Bot.UP: 
+                return currentNode.top.getTime();
+            case Bot.RIGHT:
+                return currentNode.right.getTime();
+            case Bot.DOWN:
+                return currentNode.bottom.getTime();
+            case Bot.LEFT:
+                return currentNode.left.getTime();
+            default:
+        }
+        return -1;
     }
 }

@@ -145,6 +145,10 @@ public class ControlView extends javax.swing.JFrame  {
 
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
         // TODO add your handling code here:
+        for(int i = 0; i < mazes.size(); i++)
+            if(mazes.get(i).isDispose()) 
+                mazes.remove(i);
+        
         short[][] tmp = mazeDetail.clone();
         mazes.add(new MazeView(420, 420, 10, 10, tmp, algo.getSelectedItem().toString()));
         mazes.get(mazes.size()-1).findGoal();
@@ -168,7 +172,7 @@ public class ControlView extends javax.swing.JFrame  {
 
     private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
         // TODO add your handling code here:
-       mazes.clear();
+        System.out.println(mazes.size());
     }//GEN-LAST:event_resetButtonActionPerformed
 
     private void resumeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resumeButtonActionPerformed
