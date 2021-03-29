@@ -26,7 +26,7 @@ public class ControlView extends javax.swing.JFrame  {
         {2, 2, 2, 4, 2, 5, 2, 3, 3, 3}
     };
     
-    private short[][] mazeEdit;
+    private static short[][] mazeEdit;
     private List<MazeView> mazes;
     protected boolean running = false;
     /**
@@ -242,6 +242,12 @@ public class ControlView extends javax.swing.JFrame  {
         });
     }
 
+    public static void setMazeEdit(short[][] mazeEdit) {
+        ControlView.mazeEdit = mazeEdit;
+    }
+
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> algo;
     private javax.swing.JButton edit;
