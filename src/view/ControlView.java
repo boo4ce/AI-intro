@@ -5,11 +5,8 @@
  */
 package view;
 
-import entity.Bot;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -17,7 +14,7 @@ import java.util.logging.Logger;
  */
 public class ControlView extends javax.swing.JFrame  {
     private final short[][] mazeDetail = {
-        {3, 5, 2, 2, 2, 2, 2, 3, 3, 3},
+        {3, 3, 2, 2, 2, 2, 2, 3, 3, 3},
         {3, 3, 2, 3, 3, 3, 3, 3, 2, 2},
         {2, 3, 2, 3, 2, 2, 2, 3, 3, 3},
         {2, 3, 2, 3, 3, 3, 3, 3, 2, 3},
@@ -26,7 +23,7 @@ public class ControlView extends javax.swing.JFrame  {
         {2, 3, 2, 2, 2, 2, 2, 2, 2, 3},
         {2, 3, 3, 3, 2, 3, 3, 3, 3, 3},
         {2, 3, 2, 3, 2, 3, 2, 2, 2, 3},
-        {2, 2, 2, 4, 2, 3, 2, 3, 3, 3}
+        {2, 2, 2, 4, 2, 5, 2, 3, 3, 3}
     };
     
     private List<MazeView> mazes;
@@ -150,6 +147,7 @@ public class ControlView extends javax.swing.JFrame  {
 
     private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
         // TODO add your handling code here:
+        if(running) return;
         running = true;
         for(MazeView mv : mazes) {
             new Thread(mv.getProcess()).start();

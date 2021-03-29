@@ -5,6 +5,7 @@
  */
 package entity;
 
+import java.awt.Color;
 import javax.swing.JPanel;
 
 /**
@@ -71,5 +72,10 @@ public abstract class DemoObject extends JPanel {
     public final void display() {
         this.setLocation(this.xMaze*(width + 2*padding) + padding, 
                 this.yMaze*(height + 2*padding) + padding);
+    }
+    
+    public void setColor(Color color) {
+        this.setBackground(color);
+        this.setForeground(color);
     }
 }

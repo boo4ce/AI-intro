@@ -7,6 +7,7 @@ package view;
 import entity.Bot;
 import controller.FindingProcess;
 import entity.*;
+import javax.swing.JLayeredPane;
 /**
  *
  * @author acer
@@ -31,7 +32,7 @@ public class MazeView extends javax.swing.JFrame{
         bottom = top + height;
         
         initComponents(width, height, name);
-        process = new FindingProcess(name);
+        process = new FindingProcess(this, name);
         process.setMaze(new Maze(row, column));
     }
     
@@ -45,7 +46,7 @@ public class MazeView extends javax.swing.JFrame{
         bottom = top + height;
         
         initComponents(width, height, name);
-        process = new FindingProcess(name);
+        process = new FindingProcess(this, name);
         process.getMaze().setMaze(10, 10, mazeDetail);
     }
     
@@ -106,7 +107,7 @@ public class MazeView extends javax.swing.JFrame{
         }
 
         try {
-            mazePane.setLayer(process.getBot(), 1, -1);
+            mazePane.setLayer(process.getBot(), 2, -1);
             mazePane.add(process.getBot());
             mazePane.setLayer(process.getGoal(), 1, -1);
             mazePane.add(process.getGoal());  
@@ -128,7 +129,7 @@ public class MazeView extends javax.swing.JFrame{
         this.process.reset();
     }
     
-    public final void track(int i, int j) {
-        this.remove(i*rows + j);
+    public final JLayeredPane getPane() {
+        return this.mazePane;
     }
 }

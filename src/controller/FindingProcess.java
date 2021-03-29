@@ -13,6 +13,7 @@ import java.util.Random;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import view.MazeView;
 /**
  *
  * @author acer
@@ -21,16 +22,18 @@ public class FindingProcess implements Runnable{
     private Maze maze;
     private Bot bot;
     private Goal goal;
-
+    private final MazeView mazeView;
+    
     private int firstBotX, firstBotY;
     private final String algoName;
     
     private boolean end = false;
     private boolean stop = false;
     
-    public FindingProcess(String algoName) {
+    public FindingProcess(MazeView mazeView, String algoName) {
         maze = new Maze();
         this.algoName = algoName;
+        this.mazeView = mazeView;
     }
     
     public Maze getMaze() {
@@ -93,6 +96,8 @@ public class FindingProcess implements Runnable{
             
             bot.see(left, top, right, bottom);
             
+            this.track();
+            
             // goal in 4 direction
             if(left == DemoObject.GOAL) {
                 bot.move(Bot.LEFT);
@@ -111,11 +116,6 @@ public class FindingProcess implements Runnable{
                 break;
             }
             
-            System.out.println(left + " " + right + " " + top + " " + bottom);
-            System.out.println(bot.getKinfOfLeftObject() + " " +
-                    bot.getKinfOfRightObject() + " " + 
-                    bot.getKinfOfTopObject() + " " + 
-                    bot.getKinfOfBottomObject());
             //
             if(bot.getKinfOfLeftObject() == DemoObject.WAY) {
 //                stack.push(new Pair<>(current_x-1, current_y));
@@ -134,8 +134,6 @@ public class FindingProcess implements Runnable{
                 orient.add(Bot.DOWN);
             }
             
-            System.out.println(orient.size());
-            
             if(!orient.isEmpty()) {
                 short direction = orient.get(Math.abs(random.nextInt())%orient.size());
                 
@@ -153,7 +151,7 @@ public class FindingProcess implements Runnable{
                         stack.push(new Pair<>(current_x-1, current_y));
                         break;
                 }
-                
+               
                 bot.move(direction);
                 directList.push(direction);
             } else {
@@ -204,4 +202,9 @@ public class FindingProcess implements Runnable{
         this.stop = true;
     }
    
+    private void track() {   
+        DemoObject tmp = bot.track();
+        this.mazeView.getPane().setLayer(tmp, 1, -1);
+        this.mazeView.getPane().add(tmp);
+    }
 }

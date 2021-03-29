@@ -76,7 +76,6 @@ public class Bot extends DemoObject{
     }
     
     public final void reverseMove(short direction) {
-        memory.set(DemoObject.UNKNOWN);
         switch(direction) {
             case LEFT: 
                 moveRight();
@@ -97,7 +96,6 @@ public class Bot extends DemoObject{
     }
     
     public final void move(short direction) {
-        memory.set(DemoObject.UNKNOWN);
         switch(direction) {
             case LEFT: 
                 moveLeft();
@@ -144,5 +142,12 @@ public class Bot extends DemoObject{
     
     public final short getKinfOfBottomObject() {
         return memory.getKindOfBottomNode();
+    }
+    
+    public DemoObject track() {
+        DemoObject res = new DemoObject(xMaze, yMaze, width+10, height+10) {
+        };
+        res.setColor(Color.CYAN);
+        return res;
     }
 }
