@@ -26,6 +26,7 @@ public class Bot extends DemoObject{
     public static final short UP = 2;
     public static final short RIGHT = 3;
     public static final short DOWN = 4;
+    public static final short VISITED = 5;
     
     private BufferedImage image;
     private final Memory memory;
@@ -127,5 +128,21 @@ public class Bot extends DemoObject{
     
     public void getKind() {
         System.out.println(memory.getKindOfCurrentNode());
+    }
+    
+    public final short getKinfOfLeftObject() {
+        return memory.getKindOfLeftNode();
+    }
+    
+    public final short getKinfOfRightObject() {
+        return memory.getKindOfRightNode();
+    }
+    
+    public final short getKinfOfTopObject() {
+        return memory.getKindOfTopNode();
+    }
+    
+    public final short getKinfOfBottomObject() {
+        return memory.getKindOfBottomNode();
     }
 }

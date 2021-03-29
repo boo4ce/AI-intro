@@ -8,12 +8,14 @@ package view;
 import entity.Bot;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author acer
  */
-public class ControlView extends javax.swing.JFrame {
+public class ControlView extends javax.swing.JFrame  {
     private final short[][] mazeDetail = {
         {3, 5, 2, 2, 2, 2, 2, 3, 3, 3},
         {3, 3, 2, 3, 3, 3, 3, 3, 2, 2},
@@ -29,7 +31,6 @@ public class ControlView extends javax.swing.JFrame {
     
     private List<MazeView> mazes;
     protected boolean running = false;
-    
     /**
      * Creates new form ControlView
      */
@@ -52,7 +53,6 @@ public class ControlView extends javax.swing.JFrame {
         newButton = new javax.swing.JButton();
         stopButton = new javax.swing.JButton();
         resumeButton = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
         resetButton = new javax.swing.JButton();
         startButton = new javax.swing.JButton();
         algo = new javax.swing.JComboBox<>();
@@ -88,10 +88,6 @@ public class ControlView extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 100)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("0");
-
         resetButton.setText("Reset");
         resetButton.setFocusable(false);
         resetButton.addActionListener(new java.awt.event.ActionListener() {
@@ -114,27 +110,20 @@ public class ControlView extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(48, 48, 48)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(57, 57, 57)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(resetButton, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
-                            .addComponent(resumeButton, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
-                            .addComponent(stopButton, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
-                            .addComponent(newButton, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
-                            .addComponent(startButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(algo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addGap(57, 57, 57)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(resetButton, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
+                    .addComponent(resumeButton, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
+                    .addComponent(stopButton, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
+                    .addComponent(newButton, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
+                    .addComponent(startButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(algo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(67, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(57, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(24, 24, 24)
+                .addContainerGap(196, Short.MAX_VALUE)
                 .addComponent(newButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(startButton)
@@ -163,10 +152,9 @@ public class ControlView extends javax.swing.JFrame {
         // TODO add your handling code here:
         running = true;
         for(MazeView mv : mazes) {
-//            mv.getProcess().getBot().see((short)3, (short)3, (short)3, (short)3);
-//            mv.getProcess().getBot().move(Bot.UP);
             new Thread(mv.getProcess()).start();
         }
+        
     }//GEN-LAST:event_startButtonActionPerformed
 
     private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtonActionPerformed
@@ -226,7 +214,6 @@ public class ControlView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> algo;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JButton newButton;
     private javax.swing.JButton resetButton;
     private javax.swing.JButton resumeButton;

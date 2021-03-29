@@ -5,6 +5,7 @@
  */
 package neuron;
 
+import entity.Bot;
 import entity.DemoObject;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class Memory {
         
         // new right node
         if((tmpNode = searchNode(tmpX + 1, tmpY)) == null) {
-            currentNode.addRight(kindOfLeftObject);
+            currentNode.addRight(kindOfRightObject);
             memory.add(currentNode.right);
         } else {
             currentNode.addRight(tmpNode);
@@ -45,7 +46,7 @@ public class Memory {
         
         // new top node
         if((tmpNode = searchNode(tmpX, tmpY + 1)) == null) {
-            currentNode.addTop(kindOfLeftObject);
+            currentNode.addTop(kindOfTopObject);
             memory.add(currentNode.top);
         } else {
             currentNode.addTop(tmpNode);
@@ -53,7 +54,7 @@ public class Memory {
         
         // new bottom node
         if((tmpNode = searchNode(tmpX, tmpY - 1)) == null) {
-            currentNode.addBottom(kindOfLeftObject);
+            currentNode.addBottom(kindOfBottomObject);
             memory.add(currentNode.bottom);
         } else {
             currentNode.addBottom(tmpNode);
@@ -82,22 +83,46 @@ public class Memory {
     }
     
     public final void moveLeft() {
+        currentNode.kindOfObject = Bot.VISITED;
         currentNode = currentNode.left;
     }
     
     public final void moveRight() {
+        currentNode.kindOfObject = Bot.VISITED;
         currentNode = currentNode.right;
     }
     
     public final void moveUp() {
+        currentNode.kindOfObject = Bot.VISITED;
         currentNode = currentNode.top;
     }
     
     public final void moveDown() {
+        currentNode.kindOfObject = Bot.VISITED;
         currentNode = currentNode.bottom;
     }
     
     public final short getKindOfCurrentNode() {
         return currentNode.kindOfObject;
+    }
+    
+    public final short getKindOfLeftNode() {
+        if(currentNode.left == null) return DemoObject.UNKNOWN;
+        return currentNode.left.kindOfObject;
+    }
+    
+    public final short getKindOfRightNode() {
+        if(currentNode.right == null) return DemoObject.UNKNOWN;
+        return currentNode.right.kindOfObject;
+    }
+    
+    public final short getKindOfTopNode() {
+        if(currentNode.top == null) return DemoObject.UNKNOWN;
+        return currentNode.top.kindOfObject;
+    }
+    
+    public final short getKindOfBottomNode() {
+        if(currentNode.bottom == null) return DemoObject.UNKNOWN;
+        return currentNode.bottom.kindOfObject;
     }
 }

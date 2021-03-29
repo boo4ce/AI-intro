@@ -64,6 +64,7 @@ public class FindingProcess implements Runnable{
         Stack<Short> directList = new Stack<>();
         
         stack.push(new Pair<>(bot.getxMaze(), bot.getyMaze()));
+        directList.push((short)-1);
         short left = DemoObject.UNKNOWN, right = DemoObject.UNKNOWN, 
                 top = DemoObject.UNKNOWN, bottom = DemoObject.UNKNOWN;
         
@@ -76,20 +77,18 @@ public class FindingProcess implements Runnable{
             
             current_x = current.getFirst();
             current_y = current.getSecond();
-            
-            maze.change(current_x, current_y, DemoObject.UNKNOWN);
 
             //left
-            if(current.getFirst() == 0) left = DemoObject.WALL;
+            if(current_x == 0) left = DemoObject.WALL;
             else left = maze.getKindOfObject(current_x-1, current_y); 
             //top
-            if(current.getSecond() == 0) top = DemoObject.WALL;
+            if(current_y == 0) top = DemoObject.WALL;
             else top = maze.getKindOfObject(current_x, current_y-1);
             //right
-            if(current.getFirst() == maze.getColumn() - 1) right = DemoObject.WALL;
+            if(current_x == maze.getColumn() - 1) right = DemoObject.WALL;
             else right = maze.getKindOfObject(current_x+1, current_y);
             //bottom
-            if(current.getSecond() == maze.getRow() - 1) bottom = DemoObject.WALL;
+            if(current_y == maze.getRow() - 1) bottom = DemoObject.WALL;
             else bottom = maze.getKindOfObject(current_x, current_y+1);
             
             bot.see(left, top, right, bottom);
@@ -112,23 +111,30 @@ public class FindingProcess implements Runnable{
                 break;
             }
             
+            System.out.println(left + " " + right + " " + top + " " + bottom);
+            System.out.println(bot.getKinfOfLeftObject() + " " +
+                    bot.getKinfOfRightObject() + " " + 
+                    bot.getKinfOfTopObject() + " " + 
+                    bot.getKinfOfBottomObject());
             //
-            if(left == DemoObject.WAY) {
+            if(bot.getKinfOfLeftObject() == DemoObject.WAY) {
 //                stack.push(new Pair<>(current_x-1, current_y));
                 orient.add(Bot.LEFT);
             } 
-            if(right == DemoObject.WAY) {
+            if(bot.getKinfOfRightObject() == DemoObject.WAY) {
 //                stack.push(new Pair<>(current_x+1, current_y));
                 orient.add(Bot.RIGHT);
             } 
-            if(top == DemoObject.WAY) {
+            if(bot.getKinfOfTopObject() == DemoObject.WAY) {
 //                stack.push(new Pair<>(current_x, current_y-1));
                 orient.add(Bot.UP);
             } 
-            if(bottom == DemoObject.WAY) {
+            if(bot.getKinfOfBottomObject() == DemoObject.WAY) {
 //                stack.push(new Pair<>(current_x, current_y+1));
                 orient.add(Bot.DOWN);
             }
+            
+            System.out.println(orient.size());
             
             if(!orient.isEmpty()) {
                 short direction = orient.get(Math.abs(random.nextInt())%orient.size());
@@ -176,10 +182,6 @@ public class FindingProcess implements Runnable{
         }
         
         this.end = true;
-
-
-//        this.bot.see((short)3, (short)3, (short)3, (short)3);
-//        this.bot.move(Bot.UP);
     }
     
     public void reset() {
