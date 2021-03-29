@@ -28,7 +28,7 @@ public class ControlView extends javax.swing.JFrame  {
     
     private static short[][] mazeEdit;
     private List<MazeView> mazes;
-    protected boolean running = false;
+    private boolean running = false;
     /**
      * Creates new form ControlView
      */
@@ -163,9 +163,13 @@ public class ControlView extends javax.swing.JFrame  {
 
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
         // TODO add your handling code here:
-        for(int i = 0; i < mazes.size(); i++)
-            if(mazes.get(i).isDispose()) 
-                mazes.remove(i);
+        if(running) {
+            for(int i = 0; i < mazes.size(); i++)
+            mazes.get(i).dispose();
+            mazes.clear();
+        }
+        
+        running = false;
         
         short[][] tmp = mazeEdit.clone();
         int row = tmp.length, column = tmp[0].length;
@@ -174,7 +178,7 @@ public class ControlView extends javax.swing.JFrame  {
     }//GEN-LAST:event_newButtonActionPerformed
 
     private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
-        // TODO add your handling code here:
+        // TODO add your handling code here:   
         if(running) return;
         running = true;
         for(MazeView mv : mazes) {

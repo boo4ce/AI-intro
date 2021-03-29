@@ -372,7 +372,6 @@ public class FindingProcess implements Runnable{
     
     @Override
     public void run() {
-        System.out.println("Hello");
         switch(this.algoName) {
             case "DFS":
                 this.findWayByDFS();
@@ -418,5 +417,9 @@ public class FindingProcess implements Runnable{
     public void clear() {
         this.list.clear();
         end = true;
+    }
+    
+    public boolean isEnd() {
+        return this.end;
     }
 }

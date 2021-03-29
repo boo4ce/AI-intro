@@ -136,15 +136,17 @@ public class MazeView extends javax.swing.JFrame{
 
     @Override
     public void dispose() {
+        dispose = true;
         super.dispose(); //To change body of generated methods, choose Tools | Templates.
         process.clear();
         this.mazePane.removeAll();
-        dispose = true;
     }
 
     public boolean isDispose() {
         return dispose;
     }
     
-    
+    public final boolean isFound() {
+        return process.isEnd();
+    }
 }
