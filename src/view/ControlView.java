@@ -5,6 +5,7 @@
  */
 package view;
 
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class ControlView extends javax.swing.JFrame  {
     private static short[][] mazeEdit;
     private List<MazeView> mazes;
     private boolean running = false;
+    public static int screen_width, screen_height;
     /**
      * Creates new form ControlView
      */
@@ -37,6 +39,9 @@ public class ControlView extends javax.swing.JFrame  {
         mazes = new ArrayList<>();
         
         mazeEdit = mazeDetail;
+        screen_width = Toolkit.getDefaultToolkit().getScreenSize().width;
+        screen_height = Toolkit.getDefaultToolkit().getScreenSize().height;
+        this.setLocation(30, (screen_height - this.getHeight())/2);
     }
     
 

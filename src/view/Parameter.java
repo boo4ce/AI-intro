@@ -25,6 +25,9 @@ public class Parameter extends javax.swing.JFrame {
         columnInput.setText("10");
         editView = new EditView(420, 420, 10, 10, "Edit");
         editView.display();
+        
+        this.setLocation(ControlView.screen_width/2 + 260, 
+                ControlView.screen_height/4);
     }
     
     /**

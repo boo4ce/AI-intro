@@ -13,7 +13,7 @@ import javax.swing.JLayeredPane;
  * @author acer
  */
 public class MazeView extends javax.swing.JFrame{
-    public static int left = 300, top = 10;
+//    public static int left = 300, top = 10;
     public static int right, bottom;
     
     private final int box_width, box_height;
@@ -29,8 +29,8 @@ public class MazeView extends javax.swing.JFrame{
         box_width = width/column;
         box_height = height/row;
         
-        right = left + width;
-        bottom = top + height;
+//        right = left + width;
+//        bottom = top + height;
         
         initComponents(width, height, name);
         process = new FindingProcess(this, name);
@@ -43,8 +43,8 @@ public class MazeView extends javax.swing.JFrame{
         box_width = width/column;
         box_height = height/row;
         
-        right = left + width;
-        bottom = top + height;
+//        right = left + width;
+//        bottom = top + height;
         
         initComponents(width, height, name);
         process = new FindingProcess(this, name);
@@ -53,7 +53,9 @@ public class MazeView extends javax.swing.JFrame{
     
     private void initComponents(int width, int height, String name) {
         this.setResizable(false);
-        this.setLocation(left, top);
+//        this.setLocation(left, top);
+        this.setLocation((ControlView.screen_width - width)/2, 
+                (ControlView.screen_height - height)/2);
         this.setTitle(name);
         
         mazePane = new javax.swing.JLayeredPane();

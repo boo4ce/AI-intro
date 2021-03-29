@@ -11,8 +11,6 @@ import entity.Goal;
 import entity.Wall;
 import entity.Way;
 import javax.swing.JLayeredPane;
-import static view.MazeView.left;
-import static view.MazeView.top;
 
 /**
  *
@@ -39,7 +37,8 @@ public class EditView extends javax.swing.JFrame {
     
     private void initComponents(int width, int height, String name) {
         this.setResizable(false);
-        this.setLocation(left, top);
+        this.setLocation((ControlView.screen_width - width)/2, 
+                (ControlView.screen_height - height)/2);
         this.setTitle(name);
         
         mazePane = new javax.swing.JLayeredPane();
