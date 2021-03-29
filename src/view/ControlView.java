@@ -168,7 +168,8 @@ public class ControlView extends javax.swing.JFrame  {
                 mazes.remove(i);
         
         short[][] tmp = mazeEdit.clone();
-        mazes.add(new MazeView(420, 420, 10, 10, tmp, algo.getSelectedItem().toString()));
+        int row = tmp.length, column = tmp[0].length;
+        mazes.add(new MazeView(42*column, 42*row, row, column, tmp, algo.getSelectedItem().toString()));
         mazes.get(mazes.size()-1).findGoal();
     }//GEN-LAST:event_newButtonActionPerformed
 

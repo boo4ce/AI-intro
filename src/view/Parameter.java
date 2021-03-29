@@ -181,7 +181,7 @@ public class Parameter extends javax.swing.JFrame {
         if(columnInput.getText().matches("\\d+") && rowInput.getText().matches("\\d+")) {
             int column = Integer.parseInt(columnInput.getText());
             int row = Integer.parseInt(rowInput.getText());
-            if(column < 20 && row < 20) {
+            if(column > 1 && row > 1 && column < 20 && row < 20) {
                 editView.dispose();
                 editView = new EditView(42*column, 42*row, row, column, "Edit");
                 editView.display();
@@ -194,7 +194,7 @@ public class Parameter extends javax.swing.JFrame {
         if(columnInput.getText().matches("\\d+") && rowInput.getText().matches("\\d+")) {
             int column = Integer.parseInt(columnInput.getText());
             int row = Integer.parseInt(rowInput.getText());
-            if(column < 20 && row < 20) {
+            if(column > 1 && row > 1 && column < 20 && row < 20) {
                 editView.dispose();
                 editView = new EditView(42*column, 42*row, row, column, "Edit");
                 editView.display();

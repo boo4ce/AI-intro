@@ -48,7 +48,7 @@ public class MazeView extends javax.swing.JFrame{
         
         initComponents(width, height, name);
         process = new FindingProcess(this, name);
-        process.getMaze().setMaze(10, 10, mazeDetail);
+        process.getMaze().setMaze(row, column, mazeDetail);
     }
     
     private void initComponents(int width, int height, String name) {
