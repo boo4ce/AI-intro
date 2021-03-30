@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
 Created-By: 14.0.1 (Oracle Corporation)
-Main-Class: main.main
+Main-Class: main.Main
+
 

@@ -33,7 +33,7 @@ public class Goal extends DemoObject{
         this.setBorder(BorderFactory.createEmptyBorder());
         
         try {
-            image = ImageIO.read(new File("src/image/flag.png"));
+            image = ImageIO.read(new File("image/flag.png"));
         } catch (IOException ex) {
             Logger.getLogger(Bot.class.getName()).log(Level.SEVERE, null, ex);
         }

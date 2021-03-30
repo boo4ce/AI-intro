@@ -45,7 +45,7 @@ public class Bot extends DemoObject{
         this.setBorder(BorderFactory.createEmptyBorder());
         
         try {
-            image = ImageIO.read(new File("src/image/robot.png"));
+            image = ImageIO.read(new File("image/robot.png"));
         } catch (IOException ex) {
             Logger.getLogger(Bot.class.getName()).log(Level.SEVERE, null, ex);
         }
