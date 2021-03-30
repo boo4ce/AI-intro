@@ -5,6 +5,7 @@
  */
 package entity;
 
+import image.Nothing;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -33,7 +34,7 @@ public class Goal extends DemoObject{
         this.setBorder(BorderFactory.createEmptyBorder());
         
         try {
-            image = ImageIO.read(new File("image/flag.png"));
+            image = ImageIO.read(Nothing.class.getResource("flag.png"));
         } catch (IOException ex) {
             Logger.getLogger(Bot.class.getName()).log(Level.SEVERE, null, ex);
         }

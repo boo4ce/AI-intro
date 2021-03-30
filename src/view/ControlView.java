@@ -29,7 +29,7 @@ public class ControlView extends javax.swing.JFrame  {
     
     private static short[][] mazeEdit;
     private List<MazeView> mazes;
-    private boolean running = false;
+    private boolean running = false, pause = false;
     public static int screen_width, screen_height;
     /**
      * Creates new form ControlView
@@ -194,8 +194,12 @@ public class ControlView extends javax.swing.JFrame  {
 
     private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtonActionPerformed
         // TODO add your handling code here:
+        if(pause) return;
+        pause = true;
         for(MazeView mv : mazes) 
-            mv.getProcess().pause();
+            synchronized(mv.getProcess()) {
+                mv.getProcess().pause();
+            }
     }//GEN-LAST:event_stopButtonActionPerformed
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
@@ -206,6 +210,8 @@ public class ControlView extends javax.swing.JFrame  {
 
     private void resumeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resumeButtonActionPerformed
         // TODO add your handling code here:
+        if(!pause) return;
+        pause = false;
         for(MazeView mv : mazes) {
             synchronized(mv.getProcess()) {
                 mv.getProcess().notifyAll();
