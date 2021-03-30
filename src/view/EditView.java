@@ -33,6 +33,8 @@ public class EditView extends javax.swing.JFrame {
         
         this.rows = row;
         this.columns = column;
+        
+        this.showMaze();
     }
     
     private void initComponents(int width, int height, String name) {
@@ -87,12 +89,13 @@ public class EditView extends javax.swing.JFrame {
         for(int i = 0; i < rows; i++) {
             for(int j = 0; j < columns; j++) {
                 mazeInfo[i][j] = DemoObject.WAY;
-                mazePane.add(new Way(j, i, box_width, box_height), rows*i + j);
+                mazePane.add(new Way(j, i, box_width, box_height), columns*i + j);
             }
         }
     }
     
     private void change(int x, int y, short kindOfObject) {
+        System.out.println(rows + " " + columns);
         if(kindOfObject == DemoObject.BOT) {
             if(pre_x_bot != -5) {
                 mazePane.remove(rows*pre_y_bot + pre_x_bot);
@@ -109,19 +112,23 @@ public class EditView extends javax.swing.JFrame {
         }
         
         mazeInfo[y][x] = kindOfObject;
-        mazePane.remove(rows*y + x);
+        try {
+            mazePane.remove(this.columns*y + x);
+        } catch(Exception e) {
+            System.out.println(this.getClass().toString() + "Can not remove " + e );
+        }
         switch(kindOfObject) {
             case DemoObject.WALL:
-                mazePane.add(new Wall(x, y, box_width, box_height), rows*y + x);
+                mazePane.add(new Wall(x, y, box_width, box_height), columns*y + x);
                 break;
             case DemoObject.BOT:
-                mazePane.add(new Bot(x, y, box_width, box_height, 5), rows*y + x);
+                mazePane.add(new Bot(x, y, box_width, box_height, 5), columns*y + x);
                 break;
             case DemoObject.GOAL:
-                mazePane.add(new Goal(x, y, box_width, box_height, 5), rows*y + x);
+                mazePane.add(new Goal(x, y, box_width, box_height, 5), columns*y + x);
                 break;
             case DemoObject.WAY:
-                mazePane.add(new Way(x, y, box_width, box_height), rows*y + x);
+                mazePane.add(new Way(x, y, box_width, box_height), columns*y + x);
                 break;
         }
     }
@@ -132,7 +139,6 @@ public class EditView extends javax.swing.JFrame {
     
     public void display() {
         this.setVisible(true);
-        this.showMaze();
     }
 
     public short[][] getMazeInfo() {

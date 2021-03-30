@@ -6,7 +6,6 @@
 package view;
 
 import entity.DemoObject;
-import entity.Maze;
 
 /**
  *
