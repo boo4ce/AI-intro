@@ -95,7 +95,6 @@ public class EditView extends javax.swing.JFrame {
     }
     
     private void change(int x, int y, short kindOfObject) {
-        System.out.println(rows + " " + columns);
         if(kindOfObject == DemoObject.BOT) {
             if(pre_x_bot != -5) {
                 mazePane.remove(rows*pre_y_bot + pre_x_bot);
