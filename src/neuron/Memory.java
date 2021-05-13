@@ -21,11 +21,13 @@ public class Memory {
     public Memory() {
         memory = new ArrayList<>();
         currentNode = new Node(0, 0, DemoObject.WAY);
-        currentNode.visit();
+        memory.add(currentNode);
+//        currentNode.visit();
     }
     
     public void addAroundNode(short kindOfLeftObject, short kindOfRightObject, 
             short kindOfTopObject, short kindOfBottomObject) {
+        System.out.println("Memory addArroudNode");
         int tmpX = currentNode.relativeX, tmpY = currentNode.relativeY;
         Node tmpNode;
         
@@ -86,25 +88,25 @@ public class Memory {
     public final void moveLeft() {
 //        currentNode.kindOfObject = DemoObject.WAY;
         currentNode = currentNode.left;
-        currentNode.visit();
+//        currentNode.visit();
     }
     
     public final void moveRight() {
 //        currentNode.kindOfObject = DemoObject.WAY;
         currentNode = currentNode.right;
-        currentNode.visit();
+//        currentNode.visit();
     }
     
     public final void moveUp() {
 //        currentNode.kindOfObject = DemoObject.WAY;
         currentNode = currentNode.top;
-        currentNode.visit();
+//        currentNode.visit();
     }
     
     public final void moveDown() {
 //        currentNode.kindOfObject = DemoObject.WAY;
         currentNode = currentNode.bottom;
-        currentNode.visit();
+//        currentNode.visit();
     }
     
     public final short getKindOfCurrentNode() {
@@ -144,8 +146,11 @@ public class Memory {
                 return currentNode.bottom.getTime();
             case Bot.LEFT:
                 return currentNode.left.getTime();
+            case (short)-1:
+                return currentNode.getTime();
             default:
         }
         return -1;
     }
+    
 }

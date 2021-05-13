@@ -79,11 +79,12 @@ public class Node {
         this.bottom.top = this;
     }
     
-    void visit() {
+    public void visit() {
         this.timeVisit++;
     }
     
     int getTime() {
         return this.timeVisit;
     }
+   
 }

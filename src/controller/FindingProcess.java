@@ -7,9 +7,7 @@ package controller;
 import entity.Bot;
 import entity.*;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Random;
 import java.util.Stack;
 import java.util.logging.Level;
@@ -25,13 +23,13 @@ public class FindingProcess implements Runnable{
     private Goal goal;
     private final MazeView mazeView;
     
-    private int firstBotX, firstBotY;
     private final String algoName;
     
     private boolean end = false;
     private boolean stop = false;
     
     private List<Pair<Integer, DemoObject>> list;
+    private int timePerStep = 500;
     
     public FindingProcess(MazeView mazeView, String algoName) {
         maze = new Maze();
@@ -55,8 +53,6 @@ public class FindingProcess implements Runnable{
 
     public void setBot(Bot bot) {
         this.bot = bot;
-        this.firstBotX = bot.getxMaze();
-        this.firstBotY = bot.getyMaze();
     }
 
     public Goal getGoal() {
@@ -73,8 +69,6 @@ public class FindingProcess implements Runnable{
         
         stack.push(new Pair<>(bot.getxMaze(), bot.getyMaze()));
         directList.push((short)-1);
-        short left = DemoObject.UNKNOWN, right = DemoObject.UNKNOWN, 
-                top = DemoObject.UNKNOWN, bottom = DemoObject.UNKNOWN;
         
         int current_x, current_y;
         short orient;
@@ -86,59 +80,37 @@ public class FindingProcess implements Runnable{
             
             current_x = current.getFirst();
             current_y = current.getSecond();
-
-            //left
-            if(current_x == 0) left = DemoObject.WALL;
-            else left = maze.getKindOfObject(current_x-1, current_y); 
-            //top
-            if(current_y == 0) top = DemoObject.WALL;
-            else top = maze.getKindOfObject(current_x, current_y-1);
-            //right
-            if(current_x == maze.getColumn() - 1) right = DemoObject.WALL;
-            else right = maze.getKindOfObject(current_x+1, current_y);
-            //bottom
-            if(current_y == maze.getRow() - 1) bottom = DemoObject.WALL;
-            else bottom = maze.getKindOfObject(current_x, current_y+1);
             
-            bot.see(left, top, right, bottom);
-            
+            getArround(current_x, current_y);
             this.track();
             
             // goal in 4 direction
-            if(left == DemoObject.GOAL) {
-                bot.move(Bot.LEFT);
-                break;
-            }
-            if(right == DemoObject.GOAL) {
-                bot.move(Bot.RIGHT);
-                break;
-            }
-            if(top == DemoObject.GOAL) {
-                bot.move(Bot.UP);
-                break;
-            }
-            if(bottom == DemoObject.GOAL) {
-                bot.move(Bot.DOWN);
-                break;
-            }
+            if(bot.seeGoal()) break;
+            
+            System.out.println("Current: " + bot.getTimeVisited());
+            System.out.println("Left: " + bot.getKindOfLeftObject() + " " + bot.getTimeVisited(Bot.LEFT));
+            System.out.println("Top: " + bot.getKindOfTopObject()+ " " + bot.getTimeVisited(Bot.UP));
+            System.out.println("Right: " + bot.getKindOfRightObject()+ " " + bot.getTimeVisited(Bot.RIGHT));
+            System.out.println("Bottom: " + bot.getKindOfBottomObject()+ " " + bot.getTimeVisited(Bot.DOWN));
+            System.out.println("-----------------------------------");
             
             //
-            if(bot.getKinfOfTopObject() == DemoObject.WAY 
+            if(bot.getKindOfTopObject() == DemoObject.WAY 
                     && bot.getTimeVisited(Bot.UP) == 0) {
                 stack.push(new Pair<>(current_x, current_y-1));
                 orient = Bot.UP;
             } 
-            else if(bot.getKinfOfLeftObject() == DemoObject.WAY
+            else if(bot.getKindOfLeftObject() == DemoObject.WAY
                     && bot.getTimeVisited(Bot.LEFT) == 0) {
                 stack.push(new Pair<>(current_x-1, current_y));
                 orient = Bot.LEFT;
             } 
-            else if(bot.getKinfOfRightObject() == DemoObject.WAY
+            else if(bot.getKindOfRightObject() == DemoObject.WAY
                     && bot.getTimeVisited(Bot.RIGHT) == 0) {
                 stack.push(new Pair<>(current_x+1, current_y));
                 orient = Bot.RIGHT;
             } 
-            else if(bot.getKinfOfBottomObject() == DemoObject.WAY
+            else if(bot.getKindOfBottomObject() == DemoObject.WAY
                     && bot.getTimeVisited(Bot.DOWN) == 0) {
                 stack.push(new Pair<>(current_x, current_y+1));
                 orient = Bot.DOWN;
@@ -154,7 +126,7 @@ public class FindingProcess implements Runnable{
             }
             
             try {
-                Thread.sleep(1000);
+                Thread.sleep(timePerStep);
             } catch (InterruptedException ex) {
                 Logger.getLogger(FindingProcess.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -180,8 +152,6 @@ public class FindingProcess implements Runnable{
         
         stack.push(new Pair<>(bot.getxMaze(), bot.getyMaze()));
         directList.push((short)-1);
-        short left = DemoObject.UNKNOWN, right = DemoObject.UNKNOWN, 
-                top = DemoObject.UNKNOWN, bottom = DemoObject.UNKNOWN;
         
         int current_x, current_y;
         List<Short> orient = new ArrayList<>();
@@ -194,58 +164,29 @@ public class FindingProcess implements Runnable{
             current_x = current.getFirst();
             current_y = current.getSecond();
 
-            //left
-            if(current_x == 0) left = DemoObject.WALL;
-            else left = maze.getKindOfObject(current_x-1, current_y); 
-            //top
-            if(current_y == 0) top = DemoObject.WALL;
-            else top = maze.getKindOfObject(current_x, current_y-1);
-            //right
-            if(current_x == maze.getColumn() - 1) right = DemoObject.WALL;
-            else right = maze.getKindOfObject(current_x+1, current_y);
-            //bottom
-            if(current_y == maze.getRow() - 1) bottom = DemoObject.WALL;
-            else bottom = maze.getKindOfObject(current_x, current_y+1);
-            
-            bot.see(left, top, right, bottom);
+            getArround(current_x, current_y);
             
             this.track();
-            
             // goal in 4 direction
-            if(left == DemoObject.GOAL) {
-                bot.move(Bot.LEFT);
-                break;
-            }
-            if(right == DemoObject.GOAL) {
-                bot.move(Bot.RIGHT);
-                break;
-            }
-            if(top == DemoObject.GOAL) {
-                bot.move(Bot.UP);
-                break;
-            }
-            if(bottom == DemoObject.GOAL) {
-                bot.move(Bot.DOWN);
-                break;
-            }
+            if(bot.seeGoal()) break;
             
             //
-            if(bot.getKinfOfLeftObject() == DemoObject.WAY 
+            if(bot.getKindOfLeftObject() == DemoObject.WAY 
                     && bot.getTimeVisited(Bot.LEFT) == 0) {
 //                stack.push(new Pair<>(current_x-1, current_y));
                 orient.add(Bot.LEFT);
             } 
-            if(bot.getKinfOfRightObject() == DemoObject.WAY
+            if(bot.getKindOfRightObject() == DemoObject.WAY
                     && bot.getTimeVisited(Bot.RIGHT) == 0) {
 //                stack.push(new Pair<>(current_x+1, current_y));
                 orient.add(Bot.RIGHT);
             } 
-            if(bot.getKinfOfTopObject() == DemoObject.WAY
+            if(bot.getKindOfTopObject() == DemoObject.WAY
                     && bot.getTimeVisited(Bot.UP) == 0) {
 //                stack.push(new Pair<>(current_x, current_y-1));
                 orient.add(Bot.UP);
             } 
-            if(bot.getKinfOfBottomObject() == DemoObject.WAY
+            if(bot.getKindOfBottomObject() == DemoObject.WAY
                     && bot.getTimeVisited(Bot.DOWN) == 0) {
 //                stack.push(new Pair<>(current_x, current_y+1));
                 orient.add(Bot.DOWN);
@@ -279,7 +220,81 @@ public class FindingProcess implements Runnable{
             
             orient.clear();
             try {
-                Thread.sleep(1000);
+                Thread.sleep(timePerStep);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(FindingProcess.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            if(stop) {
+                synchronized(this) {
+                    try {
+                        this.wait();
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(FindingProcess.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    this.stop = false;
+                }
+            }
+        }
+        
+        this.end = true;
+    }
+   
+    
+    private void findWayByTremaux() {
+        Stack<Pair<Integer, Integer> > stack = new Stack<>();
+        Stack<Short> directList = new Stack<>();
+        
+        stack.push(new Pair<>(bot.getxMaze(), bot.getyMaze()));
+        directList.push((short)-1);
+        
+        int current_x, current_y;
+        short orient = Bot.DOWN;
+        
+        while(!stack.empty()) {
+            if(end) return;
+            Pair<Integer, Integer> current = stack.peek();
+            
+            current_x = current.getFirst();
+            current_y = current.getSecond();
+            
+            getArround(current_x, current_y);
+            
+            this.track();
+
+            // goal in 4 direction
+            if(bot.seeGoal()) break;
+            
+            System.out.println(bot.getTimeVisited(Bot.UP));
+            //algorithm
+//            if(isMultiWay()) orient = getWay();
+                
+            if(orient != -1) {
+                switch(orient) {
+                    case Bot.UP:
+                        stack.push(new Pair<>(current_x, current_y-1));
+                        break;
+                    case Bot.DOWN:
+                        stack.push(new Pair<>(current_x, current_y+1));
+                        break;
+                    case Bot.RIGHT:
+                        stack.push(new Pair<>(current_x+1, current_y));
+                        break;
+                    case Bot.LEFT:
+                        stack.push(new Pair<>(current_x-1, current_y));
+                        break;
+                }
+               
+                bot.move(orient);
+                directList.push(orient);
+            } else {
+                stack.pop();
+                bot.reverseMove(directList.peek());
+                directList.pop();
+            }
+
+            try {
+                Thread.sleep(timePerStep);
             } catch (InterruptedException ex) {
                 Logger.getLogger(FindingProcess.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -299,75 +314,67 @@ public class FindingProcess implements Runnable{
         this.end = true;
     }
     
-    private void findWayByBFS() {
-        Queue<Pair<Integer, Integer>> queue = new LinkedList<>();
-        Queue<Short> directList = new LinkedList<>();
+    private short getWay() {
+        int _min = Integer.MAX_VALUE;
+        int left = Integer.MAX_VALUE;
+        int top = Integer.MAX_VALUE;
+        int bottom = Integer.MAX_VALUE;
+        int right = Integer.MAX_VALUE;
         
-        queue.add(new Pair<>(bot.getxMaze(), bot.getyMaze()));
-        directList.add((short)-1);
+        int count_way = 0;
+        int count_equal = 0;
         
-        short left = DemoObject.UNKNOWN, right = DemoObject.UNKNOWN, 
-                top = DemoObject.UNKNOWN, bottom = DemoObject.UNKNOWN;
-        
-        int current_x, current_y;
-        
-        while(!queue.isEmpty()) {
-            if(end) return;
-            Pair<Integer, Integer> current = queue.peek();
-            
-            current_x = current.getFirst();
-            current_y = current.getSecond();
-            
-            //left
-            if(current_x == 0) left = DemoObject.WALL;
-            else left = maze.getKindOfObject(current_x-1, current_y); 
-            //top
-            if(current_y == 0) top = DemoObject.WALL;
-            else top = maze.getKindOfObject(current_x, current_y-1);
-            //right
-            if(current_x == maze.getColumn() - 1) right = DemoObject.WALL;
-            else right = maze.getKindOfObject(current_x+1, current_y);
-            //bottom
-            if(current_y == maze.getRow() - 1) bottom = DemoObject.WALL;
-            else bottom = maze.getKindOfObject(current_x, current_y+1);
-            
-            bot.see(left, top, right, bottom);
-            
-            this.track();
-            
-            // goal in 4 direction
-            if(left == DemoObject.GOAL) {
-                bot.move(Bot.LEFT);
-                break;
-            }
-            if(right == DemoObject.GOAL) {
-                bot.move(Bot.RIGHT);
-                break;
-            }
-            if(top == DemoObject.GOAL) {
-                bot.move(Bot.UP);
-                break;
-            }
-            if(bottom == DemoObject.GOAL) {
-                bot.move(Bot.DOWN);
-                break;
-            }
-            
-            if(bot.getKinfOfLeftObject() == DemoObject.WAY) {
-                queue.add(new Pair<>(current_x-1, current_y));
-            } 
-            if(bot.getKinfOfRightObject() == DemoObject.WAY) {
-                queue.add(new Pair<>(current_x+1, current_y));
-            } 
-            if(bot.getKinfOfTopObject() == DemoObject.WAY) {
-                queue.add(new Pair<>(current_x, current_y-1));
-            } 
-            if(bot.getKinfOfBottomObject() == DemoObject.WAY) {
-                queue.add(new Pair<>(current_x, current_y+1));
-            }
+        if(bot.getKindOfLeftObject() != DemoObject.WALL) {
+            left = bot.getTimeVisited(Bot.LEFT);
+            _min = Math.min(left, _min);
+            System.out.println("Left " + left);
+            count_way++;
         }
         
-        this.end = true;
+        if(bot.getKindOfRightObject() != DemoObject.WALL) {
+            right = bot.getTimeVisited(Bot.RIGHT);
+            _min = Math.min(right, _min);
+            System.out.println("Right " + right);
+            count_way++;
+        } 
+        
+        if(bot.getKindOfBottomObject() != DemoObject.WALL) {
+            bottom = bot.getTimeVisited(Bot.DOWN);
+            _min = Math.min(bottom, _min);
+            System.out.println("Bottom " + bottom);
+            count_way++;
+        }
+        
+        if(bot.getKindOfTopObject() != DemoObject.WALL) {
+            top = bot.getTimeVisited(Bot.UP);
+            _min = Math.min(top, _min);
+            System.out.println("Top " + top);
+            count_way++;
+        }
+        
+        short orient = -1;
+        if(left == _min) {
+            orient = Bot.LEFT;
+            count_equal++;
+        }
+        if(right == _min) {
+            orient = Bot.RIGHT;
+            count_equal++;
+        }
+        if(bottom == _min) {
+            orient = Bot.DOWN;
+            count_equal++;
+        }
+        if(top == _min) {
+            orient = Bot.UP;
+            count_equal++;
+        }
+        
+        System.out.println("-------------------------------------");
+        
+        if(count_way == count_equal && count_way != 1) return -1;
+        return orient;
+
     }
     
     @Override
@@ -380,7 +387,10 @@ public class FindingProcess implements Runnable{
                 this.findWayByDFS_random();
                 break;
             case "BFS":
-                this.findWayByBFS();
+//                this.findWayByBFS();
+                break;
+            case "Tremaux":
+                this.findWayByTremaux();
                 break;
             default:
         }
@@ -399,15 +409,20 @@ public class FindingProcess implements Runnable{
         
         return null;
     }
+    
+    // --------------- track -----------------
     private void track() {
+        bot.track();
+        
         DemoObject tmp = search();
         if(tmp == null) {
-            tmp = bot.track();
+            tmp = bot.getTrackTime();
             list.add(new Pair<>(getIndex(), tmp));
             this.mazeView.getPane().setLayer(tmp, 1, this.getIndex());
             this.mazeView.getPane().add(tmp);
         }
         else ((entity.Number)tmp).increase();
+        
     }
     
     private int getIndex() {
@@ -422,4 +437,127 @@ public class FindingProcess implements Runnable{
     public boolean isEnd() {
         return this.end;
     }
+    
+    private void getArround(int current_x, int current_y) {
+        System.out.println("Get arround");
+        short left = DemoObject.UNKNOWN, right = DemoObject.UNKNOWN, 
+                top = DemoObject.UNKNOWN, bottom = DemoObject.UNKNOWN;
+        
+        if(bot.getTimeVisited() == 0) 
+        {
+            //left
+            if(current_x == 0) left = DemoObject.WALL;
+            else left = maze.getKindOfObject(current_x-1, current_y); 
+            //top
+            if(current_y == 0) top = DemoObject.WALL;
+            else top = maze.getKindOfObject(current_x, current_y-1);
+            //right
+            if(current_x == maze.getColumn() - 1) right = DemoObject.WALL;
+            else right = maze.getKindOfObject(current_x+1, current_y);
+            //bottom
+            if(current_y == maze.getRow() - 1) bottom = DemoObject.WALL;
+            else bottom = maze.getKindOfObject(current_x, current_y+1);
+
+            bot.see(left, top, right, bottom);
+            
+        }
+    }
+    
+    private boolean isMultiWay() {
+        int count_way = 0;
+        if(bot.getKindOfLeftObject() != DemoObject.WALL) {
+        
+            count_way++;
+        }
+        
+        if(bot.getKindOfRightObject() != DemoObject.WALL) {
+           
+            count_way++;
+        } 
+        
+        if(bot.getKindOfBottomObject() != DemoObject.WALL) {
+           
+            count_way++;
+        }
+        
+        if(bot.getKindOfTopObject() != DemoObject.WALL) {
+            
+            count_way++;
+        }
+        
+        return count_way > 2;
+    }
+    
+    
+    
+//    private void findWayByBFS() {
+//        Queue<Pair<Integer, Integer>> queue = new LinkedList<>();
+//        Queue<Short> directList = new LinkedList<>();
+//        
+//        queue.add(new Pair<>(bot.getxMaze(), bot.getyMaze()));
+//        directList.add((short)-1);
+//        
+//        short left = DemoObject.UNKNOWN, right = DemoObject.UNKNOWN, 
+//                top = DemoObject.UNKNOWN, bottom = DemoObject.UNKNOWN;
+//        
+//        int current_x, current_y;
+//        
+//        while(!queue.isEmpty()) {
+//            if(end) return;
+//            Pair<Integer, Integer> current = queue.peek();
+//            
+//            current_x = current.getFirst();
+//            current_y = current.getSecond();
+//            
+//            //left
+//            if(current_x == 0) left = DemoObject.WALL;
+//            else left = maze.getKindOfObject(current_x-1, current_y); 
+//            //top
+//            if(current_y == 0) top = DemoObject.WALL;
+//            else top = maze.getKindOfObject(current_x, current_y-1);
+//            //right
+//            if(current_x == maze.getColumn() - 1) right = DemoObject.WALL;
+//            else right = maze.getKindOfObject(current_x+1, current_y);
+//            //bottom
+//            if(current_y == maze.getRow() - 1) bottom = DemoObject.WALL;
+//            else bottom = maze.getKindOfObject(current_x, current_y+1);
+//            
+//            bot.see(left, top, right, bottom);
+//            
+//            this.track();
+//            
+//            // goal in 4 direction
+//            if(left == DemoObject.GOAL) {
+//                bot.move(Bot.LEFT);
+//                break;
+//            }
+//            if(right == DemoObject.GOAL) {
+//                bot.move(Bot.RIGHT);
+//                break;
+//            }
+//            if(top == DemoObject.GOAL) {
+//                bot.move(Bot.UP);
+//                break;
+//            }
+//            if(bottom == DemoObject.GOAL) {
+//                bot.move(Bot.DOWN);
+//                break;
+//            }
+//            
+//            if(bot.getKindOfLeftObject() == DemoObject.WAY) {
+//                queue.add(new Pair<>(current_x-1, current_y));
+//            } 
+//            if(bot.getKindOfRightObject() == DemoObject.WAY) {
+//                queue.add(new Pair<>(current_x+1, current_y));
+//            } 
+//            if(bot.getKindOfTopObject() == DemoObject.WAY) {
+//                queue.add(new Pair<>(current_x, current_y-1));
+//            } 
+//            if(bot.getKindOfBottomObject() == DemoObject.WAY) {
+//                queue.add(new Pair<>(current_x, current_y+1));
+//            }
+//        }
+//        
+//        this.end = true;
+//    }
 }

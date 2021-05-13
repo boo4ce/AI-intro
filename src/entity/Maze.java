@@ -50,6 +50,7 @@ public class Maze {
     }
     
     public short getKindOfObject(int x, int y) {
+        if(this.maze[y][x] == DemoObject.BOT) return DemoObject.WAY;
         return this.maze[y][x];
     }
     
@@ -81,4 +82,5 @@ public class Maze {
             {3, 3, 3, 3, 3, 3, 3, 3, 3, 3}
         };
     }
+   
 }

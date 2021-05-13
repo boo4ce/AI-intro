@@ -114,6 +114,7 @@ public class Bot extends DemoObject{
     }
     
     public final void see(short left, short top, short right, short bottom) {
+        System.out.println("Bot see");
         memory.addAroundNode(left, right, top, bottom);    
     }
     
@@ -126,29 +127,57 @@ public class Bot extends DemoObject{
         System.out.println(memory.getKindOfCurrentNode());
     }
     
-    public final short getKinfOfLeftObject() {
+    public final short getKindOfLeftObject() {
         return memory.getKindOfLeftNode();
     }
     
-    public final short getKinfOfRightObject() {
+    public final short getKindOfRightObject() {
         return memory.getKindOfRightNode();
     }
     
-    public final short getKinfOfTopObject() {
+    public final short getKindOfTopObject() {
         return memory.getKindOfTopNode();
     }
     
-    public final short getKinfOfBottomObject() {
+    public final short getKindOfBottomObject() {
         return memory.getKindOfBottomNode();
     }
     
-    public Number track() {
+    public void track() {
+        this.memory.getCurrentNode().visit();
+    }
+    
+    public Number getTrackTime() {
         Number res = new Number(xMaze, yMaze, width+10, height+10, this.memory.getTimeVisited()) {
         };
         return res;
     }
     
+    public final int getTimeVisited() {
+        return this.memory.getTimeVisited();
+    }
+    
     public final int getTimeVisited(short direction) {
         return this.memory.getTimeVisited(direction);
+    }
+    
+    public final boolean seeGoal() {
+        if(this.getKindOfLeftObject() == DemoObject.GOAL) {
+            this.move(Bot.LEFT);
+            return true;
+        }
+        if(this.getKindOfRightObject() == DemoObject.GOAL) {
+            this.move(Bot.RIGHT);
+            return true;
+        }
+        if(this.getKindOfTopObject() == DemoObject.GOAL) {
+            this.move(Bot.UP);
+            return true;
+        }
+        if(this.getKindOfBottomObject() == DemoObject.GOAL) {
+            this.move(Bot.DOWN);
+            return true;
+        }
+        return false;
     }
 }

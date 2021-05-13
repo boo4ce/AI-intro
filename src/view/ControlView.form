@@ -121,7 +121,7 @@
           <StringArray count="3">
             <StringItem index="0" value="DFS"/>
             <StringItem index="1" value="DFS-random"/>
-            <StringItem index="2" value="BFS"/>
+            <StringItem index="2" value="Tremaux"/>
           </StringArray>
         </Property>
       </Properties>
