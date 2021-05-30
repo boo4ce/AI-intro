@@ -87,13 +87,6 @@ public class FindingProcess implements Runnable{
             // goal in 4 direction
             if(bot.seeGoal()) break;
             
-            System.out.println("Current: " + bot.getTimeVisited());
-            System.out.println("Left: " + bot.getKindOfLeftObject() + " " + bot.getTimeVisited(Bot.LEFT));
-            System.out.println("Top: " + bot.getKindOfTopObject()+ " " + bot.getTimeVisited(Bot.UP));
-            System.out.println("Right: " + bot.getKindOfRightObject()+ " " + bot.getTimeVisited(Bot.RIGHT));
-            System.out.println("Bottom: " + bot.getKindOfBottomObject()+ " " + bot.getTimeVisited(Bot.DOWN));
-            System.out.println("-----------------------------------");
-            
             //
             if(bot.getKindOfTopObject() == DemoObject.WAY 
                     && bot.getTimeVisited(Bot.UP) == 0) {
@@ -265,9 +258,8 @@ public class FindingProcess implements Runnable{
             // goal in 4 direction
             if(bot.seeGoal()) break;
             
-            System.out.println(bot.getTimeVisited(Bot.UP));
             //algorithm
-//            if(isMultiWay()) orient = getWay();
+            if(isMultiWay()) orient = fixedGetWay();
                 
             if(orient != -1) {
                 switch(orient) {
@@ -313,8 +305,78 @@ public class FindingProcess implements Runnable{
         
         this.end = true;
     }
-    
-    private short getWay() {
+    private void findWayByTremaux_random() {
+        Stack<Pair<Integer, Integer> > stack = new Stack<>();
+        Stack<Short> directList = new Stack<>();
+        
+        stack.push(new Pair<>(bot.getxMaze(), bot.getyMaze()));
+        directList.push((short)-1);
+        
+        int current_x, current_y;
+        short orient = Bot.DOWN;
+        
+        while(!stack.empty()) {
+            if(end) return;
+            Pair<Integer, Integer> current = stack.peek();
+            
+            current_x = current.getFirst();
+            current_y = current.getSecond();
+            
+            getArround(current_x, current_y);
+            
+            this.track();
+
+            // goal in 4 direction
+            if(bot.seeGoal()) break;
+            
+            //algorithm
+            if(isMultiWay()) orient = randomGetWay();
+                
+            if(orient != -1) {
+                switch(orient) {
+                    case Bot.UP:
+                        stack.push(new Pair<>(current_x, current_y-1));
+                        break;
+                    case Bot.DOWN:
+                        stack.push(new Pair<>(current_x, current_y+1));
+                        break;
+                    case Bot.RIGHT:
+                        stack.push(new Pair<>(current_x+1, current_y));
+                        break;
+                    case Bot.LEFT:
+                        stack.push(new Pair<>(current_x-1, current_y));
+                        break;
+                }
+               
+                bot.move(orient);
+                directList.push(orient);
+            } else {
+                stack.pop();
+                bot.reverseMove(directList.peek());
+                directList.pop();
+            }
+
+            try {
+                Thread.sleep(timePerStep);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(FindingProcess.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            if(stop) {
+                synchronized(this) {
+                    try {
+                        this.wait();
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(FindingProcess.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    this.stop = false;
+                }
+            }
+        }
+        
+        this.end = true;
+    }
+    private short fixedGetWay() {
         int _min = Integer.MAX_VALUE;
         int left = Integer.MAX_VALUE;
         int top = Integer.MAX_VALUE;
@@ -376,7 +438,67 @@ public class FindingProcess implements Runnable{
         return orient;
 
     }
-    
+    private short randomGetWay() {
+        int _min = Integer.MAX_VALUE;
+        int left = Integer.MAX_VALUE;
+        int top = Integer.MAX_VALUE;
+        int bottom = Integer.MAX_VALUE;
+        int right = Integer.MAX_VALUE;
+        
+        int count_way = 0;
+        int count_equal = 0;
+        
+        if(bot.getKindOfLeftObject() != DemoObject.WALL) {
+            left = bot.getTimeVisited(Bot.LEFT);
+            _min = Math.min(left, _min);
+            System.out.println("Left " + left);
+            count_way++;
+        }
+        
+        if(bot.getKindOfRightObject() != DemoObject.WALL) {
+            right = bot.getTimeVisited(Bot.RIGHT);
+            _min = Math.min(right, _min);
+            System.out.println("Right " + right);
+            count_way++;
+        } 
+        
+        if(bot.getKindOfBottomObject() != DemoObject.WALL) {
+            bottom = bot.getTimeVisited(Bot.DOWN);
+            _min = Math.min(bottom, _min);
+            System.out.println("Bottom " + bottom);
+            count_way++;
+        }
+        
+        if(bot.getKindOfTopObject() != DemoObject.WALL) {
+            top = bot.getTimeVisited(Bot.UP);
+            _min = Math.min(top, _min);
+            System.out.println("Top " + top);
+            count_way++;
+        }
+        
+        List<Short> orient = new ArrayList<>();
+        Random random = new Random();
+        
+        if(left == _min) {
+            orient.add(Bot.LEFT);
+            count_equal++;
+        }
+        if(right == _min) {
+            orient.add(Bot.RIGHT);
+            count_equal++;
+        }
+        if(bottom == _min) {
+            orient.add(Bot.DOWN);
+            count_equal++;
+        }
+        if(top == _min) {
+            orient.add(Bot.UP);
+            count_equal++;
+        }
+        
+        if(count_way == count_equal && count_way != 1) return -1;
+        return orient.get(Math.abs(random.nextInt())%orient.size());
+    }
     @Override
     public void run() {
         switch(this.algoName) {
@@ -392,6 +514,8 @@ public class FindingProcess implements Runnable{
             case "Tremaux":
                 this.findWayByTremaux();
                 break;
+            case "Tremaux-random":
+                this.findWayByTremaux_random();
             default:
         }
     }
@@ -464,30 +588,18 @@ public class FindingProcess implements Runnable{
     }
     
     private boolean isMultiWay() {
-        int count_way = 0;
-        if(bot.getKindOfLeftObject() != DemoObject.WALL) {
-        
-            count_way++;
+        if(bot.getKindOfBottomObject() == DemoObject.WAY
+                && bot.getKindOfTopObject()== DemoObject.WAY
+                && bot.getKindOfLeftObject() == DemoObject.WALL
+                && bot.getKindOfRightObject() == DemoObject.WALL) {
+            return false;
         }
         
-        if(bot.getKindOfRightObject() != DemoObject.WALL) {
-           
-            count_way++;
-        } 
-        
-        if(bot.getKindOfBottomObject() != DemoObject.WALL) {
-           
-            count_way++;
-        }
-        
-        if(bot.getKindOfTopObject() != DemoObject.WALL) {
-            
-            count_way++;
-        }
-        
-        return count_way > 2;
+        return !(bot.getKindOfBottomObject() == DemoObject.WALL
+                && bot.getKindOfTopObject()== DemoObject.WALL
+                && bot.getKindOfLeftObject() == DemoObject.WAY
+                && bot.getKindOfRightObject() == DemoObject.WAY);
     }
-    
     
     
 //    private void findWayByBFS() {

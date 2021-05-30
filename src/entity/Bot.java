@@ -148,9 +148,7 @@ public class Bot extends DemoObject{
     }
     
     public Number getTrackTime() {
-        Number res = new Number(xMaze, yMaze, width+10, height+10, this.memory.getTimeVisited()) {
-        };
-        return res;
+        return new Number(xMaze, yMaze, width+10, height+10, this.memory.getTimeVisited());
     }
     
     public final int getTimeVisited() {
