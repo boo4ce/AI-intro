@@ -118,11 +118,12 @@
     <Component class="javax.swing.JComboBox" name="algo">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
+          <StringArray count="5">
             <StringItem index="0" value="DFS"/>
             <StringItem index="1" value="DFS-random"/>
             <StringItem index="2" value="Tremaux"/>
             <StringItem index="3" value="Tremaux-random"/>
+            <StringItem index="4" value="Wall Follow"/>
           </StringArray>
         </Property>
       </Properties>

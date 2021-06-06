@@ -281,7 +281,9 @@ public class FindingProcess implements Runnable{
                 directList.push(orient);
             } else {
                 stack.pop();
-                bot.reverseMove(directList.peek());
+                if(directList.peek() == -1) {
+                    goRandomAvailable();
+                } else bot.reverseMove(directList.peek());
                 directList.pop();
             }
 
@@ -352,7 +354,9 @@ public class FindingProcess implements Runnable{
                 directList.push(orient);
             } else {
                 stack.pop();
-                bot.reverseMove(directList.peek());
+                if(directList.peek() == -1) {
+                    goRandomAvailable();
+                } else bot.reverseMove(directList.peek());
                 directList.pop();
             }
 
@@ -376,6 +380,94 @@ public class FindingProcess implements Runnable{
         
         this.end = true;
     }
+    
+    private void findWayByWallFollower() {
+        boolean isMoved = false;
+        short preWall = 0;
+        
+        while(true) {
+            getArround(bot.getxMaze(), bot.getyMaze());
+            this.track();
+             
+            isMoved = false;
+            
+            System.out.println(bot.getKindOfBottomObject());
+            
+            if(bot.seeGoal()) break;
+            if(bot.getKindOfLeftObject() != DemoObject.WAY || bot.getKindOfRightObject() != DemoObject.WAY) {
+                if(bot.getKindOfLeftObject() != DemoObject.WAY) {
+                    preWall = Bot.LEFT;
+                } else preWall = Bot.RIGHT;
+                
+                if(bot.getKindOfTopObject() == DemoObject.WAY && bot.getTimeVisited(Bot.UP) == 0) {
+                    bot.move(Bot.UP);
+                    isMoved = true;
+                } else if(bot.getKindOfBottomObject() == DemoObject.WAY && bot.getTimeVisited(Bot.DOWN) == 0) {
+                    bot.move(Bot.DOWN);
+                    isMoved = true;
+                }
+            } 
+            
+            if(!isMoved && (bot.getKindOfTopObject() != DemoObject.WAY || bot.getKindOfBottomObject() != DemoObject.WAY)) {
+                if(bot.getKindOfTopObject() != DemoObject.WAY) {
+                    preWall = Bot.UP;
+                } else preWall = Bot.DOWN;
+                
+                if(bot.getKindOfLeftObject() == DemoObject.WAY && bot.getTimeVisited(Bot.LEFT) == 0) {
+                    bot.move(Bot.LEFT);
+                    isMoved = true;
+                } else if(bot.getKindOfRightObject() == DemoObject.WAY && bot.getTimeVisited(Bot.RIGHT) == 0) {
+                    bot.move(Bot.RIGHT);
+                    isMoved = true;
+                }
+            }
+            
+            if(!isMoved) {
+                bot.move(preWall);
+            }
+            
+            try {
+                Thread.sleep(timePerStep);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(FindingProcess.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            if(stop) {
+                synchronized(this) {
+                    try {
+                        this.wait();
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(FindingProcess.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    this.stop = false;
+                }
+            }
+        }
+        
+        this.end = true;
+    }
+    
+    private void goRandomAvailable() {
+        if(bot.getKindOfLeftObject() == DemoObject.WAY) {
+            bot.move(Bot.LEFT);
+            return;
+        }
+        
+        if(bot.getKindOfRightObject() == DemoObject.WAY) {
+            bot.move(Bot.RIGHT);
+            return;
+        }
+        
+        if(bot.getKindOfTopObject() == DemoObject.WAY) {
+            bot.move(Bot.UP);
+            return;
+        }
+        
+        if(bot.getKindOfBottomObject() == DemoObject.WAY) {
+            bot.move(Bot.DOWN);
+        }
+    }
+    
     private short fixedGetWay() {
         int _min = Integer.MAX_VALUE;
         int left = Integer.MAX_VALUE;
@@ -516,6 +608,10 @@ public class FindingProcess implements Runnable{
                 break;
             case "Tremaux-random":
                 this.findWayByTremaux_random();
+                break;
+            case "Wall Follow":
+                this.findWayByWallFollower();
+                break;
             default:
         }
     }

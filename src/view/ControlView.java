@@ -110,7 +110,7 @@ public class ControlView extends javax.swing.JFrame  {
             }
         });
 
-        algo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "DFS", "DFS-random", "Tremaux", "Tremaux-random" }));
+        algo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "DFS", "DFS-random", "Tremaux", "Tremaux-random", "Wall Follow" }));
         algo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 algoActionPerformed(evt);
