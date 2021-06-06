@@ -218,7 +218,7 @@ public class FindingProcess implements Runnable{
             if(bot.seeGoal()) break;
             
             //algorithm
-            if(isMultiWay()) orient = fixedGetWay(orient);
+            if(isMultiWay()) orient = fixedGetWay();
                 
             if(orient != -1) {
                 bot.move(orient);
@@ -391,6 +391,7 @@ public class FindingProcess implements Runnable{
     
     @Deprecated
     private short fixedGetWay() {
+        System.out.println("fixedGetWay");
         int _min = Integer.MAX_VALUE;
         int left = Integer.MAX_VALUE;
         int top = Integer.MAX_VALUE;
@@ -403,28 +404,24 @@ public class FindingProcess implements Runnable{
         if(bot.getKindOfLeftObject() != DemoObject.WALL) {
             left = bot.getTimeVisited(Bot.LEFT);
             _min = Math.min(left, _min);
-            System.out.println("Left " + left);
             count_way++;
         }
         
         if(bot.getKindOfRightObject() != DemoObject.WALL) {
             right = bot.getTimeVisited(Bot.RIGHT);
             _min = Math.min(right, _min);
-            System.out.println("Right " + right);
             count_way++;
         } 
         
         if(bot.getKindOfBottomObject() != DemoObject.WALL) {
             bottom = bot.getTimeVisited(Bot.DOWN);
             _min = Math.min(bottom, _min);
-            System.out.println("Bottom " + bottom);
             count_way++;
         }
         
         if(bot.getKindOfTopObject() != DemoObject.WALL) {
             top = bot.getTimeVisited(Bot.UP);
             _min = Math.min(top, _min);
-            System.out.println("Top " + top);
             count_way++;
         }
         
@@ -446,8 +443,8 @@ public class FindingProcess implements Runnable{
             count_equal++;
         }
         
-        System.out.println("-------------------------------------");
-        
+        System.out.println(top + " " + left + " " + right + " " + bottom + " " + _min);
+        System.out.println(count_way + " " + count_equal);
         if(count_way == count_equal && count_way != 1) return -1;
         return orient;
 
@@ -467,28 +464,24 @@ public class FindingProcess implements Runnable{
         if(bot.getKindOfLeftObject() != DemoObject.WALL) {
             left = bot.getTimeVisited(Bot.LEFT);
             _min = Math.min(left, _min);
-            System.out.println("Left " + left);
             count_way++;
         }
         
         if(bot.getKindOfRightObject() != DemoObject.WALL) {
             right = bot.getTimeVisited(Bot.RIGHT);
             _min = Math.min(right, _min);
-            System.out.println("Right " + right);
             count_way++;
         } 
         
         if(bot.getKindOfBottomObject() != DemoObject.WALL) {
             bottom = bot.getTimeVisited(Bot.DOWN);
             _min = Math.min(bottom, _min);
-            System.out.println("Bottom " + bottom);
             count_way++;
         }
         
         if(bot.getKindOfTopObject() != DemoObject.WALL) {
             top = bot.getTimeVisited(Bot.UP);
             _min = Math.min(top, _min);
-            System.out.println("Top " + top);
             count_way++;
         }
         
@@ -517,55 +510,58 @@ public class FindingProcess implements Runnable{
     }
     
     private short fixedGetWay(short orient) {
-        switch(orient) {
-            case Bot.UP:
-                if(bot.getTimeVisited(Bot.UP) != 0) {
-                    return Bot.DOWN;
-                }
-                break;
-            case Bot.DOWN:
-                if(bot.getTimeVisited(Bot.DOWN) != 0) {
-                    return Bot.UP;
-                }
-                break;
-            case Bot.LEFT:
-                if(bot.getTimeVisited(Bot.LEFT) != 0) {
-                    return Bot.RIGHT;
-                }
-                break;
-            case Bot.RIGHT:
-                if(bot.getTimeVisited(Bot.RIGHT) != 0) {
-                    return Bot.LEFT;
-                }
-                break;
+        if(bot.getTimeVisited(Bot.getOpposite(orient)) < 2) {
+            switch(orient) {
+                case Bot.UP:
+                    if(bot.getTimeVisited(Bot.UP) == 1) {
+                        return Bot.DOWN;
+                    }
+                    break;
+                case Bot.DOWN:
+                    if(bot.getTimeVisited(Bot.DOWN) == 1) {
+                        return Bot.UP;
+                    }
+                    break;
+                case Bot.LEFT:
+                    if(bot.getTimeVisited(Bot.LEFT) == 1) {
+                        return Bot.RIGHT;
+                    }
+                    break;
+                case Bot.RIGHT:
+                    if(bot.getTimeVisited(Bot.RIGHT) == 1) {
+                        return Bot.LEFT;
+                    }
+                    break;
+            }
         }
         
         return fixedGetWay();
     }
     
     private short randomGetWay(short orient) {
-        switch(orient) {
-            case Bot.UP:
-                if(bot.getTimeVisited(Bot.UP) != 0) {
-                    return Bot.DOWN;
-                }
-                break;
-            case Bot.DOWN:
-                if(bot.getTimeVisited(Bot.DOWN) != 0) {
-                    return Bot.UP;
-                }
-                break;
-            case Bot.LEFT:
-                if(bot.getTimeVisited(Bot.LEFT) != 0) {
-                    return Bot.RIGHT;
-                }
-                break;
-            case Bot.RIGHT:
-                if(bot.getTimeVisited(Bot.RIGHT) != 0) {
-                    return Bot.LEFT;
-                }
-                break;
-        }
+        if(bot.getTimeVisited(Bot.getOpposite(orient)) < 2) 
+            switch(orient) {
+                case Bot.UP:
+                    if(bot.getTimeVisited(Bot.UP) == 1) {
+                        return Bot.DOWN;
+                    }
+                    break;
+                case Bot.DOWN:
+                    if(bot.getTimeVisited(Bot.DOWN) == 1) {
+                        return Bot.UP;
+                    }
+                    break;
+                case Bot.LEFT:
+                    if(bot.getTimeVisited(Bot.LEFT) == 1) {
+                        return Bot.RIGHT;
+                    }
+                    break;
+                case Bot.RIGHT:
+                    if(bot.getTimeVisited(Bot.RIGHT) == 1) {
+                        return Bot.LEFT;
+                    }
+                    break;
+            }
         
         return randomGetWay();
     }

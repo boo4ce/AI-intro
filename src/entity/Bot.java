@@ -178,4 +178,21 @@ public class Bot extends DemoObject{
         }
         return false;
     }
+    
+    public static short getOpposite(short orient) {
+        switch(orient) {
+            case Bot.UP:
+
+                    return Bot.DOWN;
+
+            case Bot.DOWN:
+                    return Bot.UP;
+
+            case Bot.LEFT:
+                    return Bot.RIGHT;
+            case Bot.RIGHT:
+                    return Bot.LEFT;
+        }
+        return -1;
+    }
 }
