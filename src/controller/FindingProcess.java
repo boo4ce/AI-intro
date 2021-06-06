@@ -218,7 +218,7 @@ public class FindingProcess implements Runnable{
             if(bot.seeGoal()) break;
             
             //algorithm
-            if(isMultiWay()) orient = fixedGetWay();
+            if(isMultiWay()) orient = fixedGetWay(orient);
                 
             if(orient != -1) {
                 bot.move(orient);
@@ -255,7 +255,6 @@ public class FindingProcess implements Runnable{
         
         directList.push((short)-1);
         
-        int current_x, current_y;
         short orient = Bot.DOWN;
         
         while(true) {
@@ -269,7 +268,7 @@ public class FindingProcess implements Runnable{
             if(bot.seeGoal()) break;
             
             //algorithm
-            if(isMultiWay()) orient = randomGetWay();
+            if(isMultiWay()) orient = randomGetWay(orient);
                 
             if(orient != -1) {
                 bot.move(orient);
@@ -390,6 +389,7 @@ public class FindingProcess implements Runnable{
         }
     }
     
+    @Deprecated
     private short fixedGetWay() {
         int _min = Integer.MAX_VALUE;
         int left = Integer.MAX_VALUE;
@@ -452,6 +452,8 @@ public class FindingProcess implements Runnable{
         return orient;
 
     }
+    
+    @Deprecated
     private short randomGetWay() {
         int _min = Integer.MAX_VALUE;
         int left = Integer.MAX_VALUE;
@@ -513,6 +515,61 @@ public class FindingProcess implements Runnable{
         if(count_way == count_equal && count_way != 1) return -1;
         return orient.get(Math.abs(random.nextInt())%orient.size());
     }
+    
+    private short fixedGetWay(short orient) {
+        switch(orient) {
+            case Bot.UP:
+                if(bot.getTimeVisited(Bot.UP) != 0) {
+                    return Bot.DOWN;
+                }
+                break;
+            case Bot.DOWN:
+                if(bot.getTimeVisited(Bot.DOWN) != 0) {
+                    return Bot.UP;
+                }
+                break;
+            case Bot.LEFT:
+                if(bot.getTimeVisited(Bot.LEFT) != 0) {
+                    return Bot.RIGHT;
+                }
+                break;
+            case Bot.RIGHT:
+                if(bot.getTimeVisited(Bot.RIGHT) != 0) {
+                    return Bot.LEFT;
+                }
+                break;
+        }
+        
+        return fixedGetWay();
+    }
+    
+    private short randomGetWay(short orient) {
+        switch(orient) {
+            case Bot.UP:
+                if(bot.getTimeVisited(Bot.UP) != 0) {
+                    return Bot.DOWN;
+                }
+                break;
+            case Bot.DOWN:
+                if(bot.getTimeVisited(Bot.DOWN) != 0) {
+                    return Bot.UP;
+                }
+                break;
+            case Bot.LEFT:
+                if(bot.getTimeVisited(Bot.LEFT) != 0) {
+                    return Bot.RIGHT;
+                }
+                break;
+            case Bot.RIGHT:
+                if(bot.getTimeVisited(Bot.RIGHT) != 0) {
+                    return Bot.LEFT;
+                }
+                break;
+        }
+        
+        return randomGetWay();
+    }
+    
     @Override
     public void run() {
         switch(this.algoName) {
