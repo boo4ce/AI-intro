@@ -64,24 +64,17 @@ public class FindingProcess implements Runnable{
     }
     
     private void findWayByDFS() {
-        Stack<Pair<Integer, Integer> > stack = new Stack<>();
         Stack<Short> directList = new Stack<>();
         
-        stack.push(new Pair<>(bot.getxMaze(), bot.getyMaze()));
         directList.push((short)-1);
         
-        int current_x, current_y;
         short orient;
         
-        while(!stack.empty()) {
+        while(true) {
             if(end) return;
             orient = -1;
-            Pair<Integer, Integer> current = stack.peek();
             
-            current_x = current.getFirst();
-            current_y = current.getSecond();
-            
-            getArround(current_x, current_y);
+            getArround(bot.getxMaze(), bot.getyMaze());
             this.track();
             
             // goal in 4 direction
@@ -90,22 +83,19 @@ public class FindingProcess implements Runnable{
             //
             if(bot.getKindOfTopObject() == DemoObject.WAY 
                     && bot.getTimeVisited(Bot.UP) == 0) {
-                stack.push(new Pair<>(current_x, current_y-1));
+                
                 orient = Bot.UP;
             } 
             else if(bot.getKindOfLeftObject() == DemoObject.WAY
                     && bot.getTimeVisited(Bot.LEFT) == 0) {
-                stack.push(new Pair<>(current_x-1, current_y));
                 orient = Bot.LEFT;
             } 
             else if(bot.getKindOfRightObject() == DemoObject.WAY
                     && bot.getTimeVisited(Bot.RIGHT) == 0) {
-                stack.push(new Pair<>(current_x+1, current_y));
                 orient = Bot.RIGHT;
             } 
             else if(bot.getKindOfBottomObject() == DemoObject.WAY
                     && bot.getTimeVisited(Bot.DOWN) == 0) {
-                stack.push(new Pair<>(current_x, current_y+1));
                 orient = Bot.DOWN;
             }
             
@@ -113,7 +103,6 @@ public class FindingProcess implements Runnable{
                 bot.move(orient);
                 directList.push(orient);
             } else {
-                stack.pop();
                 bot.reverseMove(directList.peek());
                 directList.pop();
             }
@@ -140,24 +129,17 @@ public class FindingProcess implements Runnable{
     }
     
     private void findWayByDFS_random() {
-        Stack<Pair<Integer, Integer> > stack = new Stack<>();
         Stack<Short> directList = new Stack<>();
         
-        stack.push(new Pair<>(bot.getxMaze(), bot.getyMaze()));
         directList.push((short)-1);
         
-        int current_x, current_y;
         List<Short> orient = new ArrayList<>();
         Random random = new Random();
         
-        while(!stack.empty()) {
+        while(true) {
             if(end) return;
-            Pair<Integer, Integer> current = stack.peek();
             
-            current_x = current.getFirst();
-            current_y = current.getSecond();
-
-            getArround(current_x, current_y);
+            getArround(bot.getxMaze(), bot.getyMaze());
             
             this.track();
             // goal in 4 direction
@@ -188,25 +170,9 @@ public class FindingProcess implements Runnable{
             if(!orient.isEmpty()) {
                 short direction = orient.get(Math.abs(random.nextInt())%orient.size());
                 
-                switch(direction) {
-                    case Bot.UP:
-                        stack.push(new Pair<>(current_x, current_y-1));
-                        break;
-                    case Bot.DOWN:
-                        stack.push(new Pair<>(current_x, current_y+1));
-                        break;
-                    case Bot.RIGHT:
-                        stack.push(new Pair<>(current_x+1, current_y));
-                        break;
-                    case Bot.LEFT:
-                        stack.push(new Pair<>(current_x-1, current_y));
-                        break;
-                }
-               
                 bot.move(direction);
                 directList.push(direction);
             } else {
-                stack.pop();
                 bot.reverseMove(directList.peek());
                 directList.pop();
             }
@@ -235,23 +201,16 @@ public class FindingProcess implements Runnable{
    
     
     private void findWayByTremaux() {
-        Stack<Pair<Integer, Integer> > stack = new Stack<>();
         Stack<Short> directList = new Stack<>();
         
-        stack.push(new Pair<>(bot.getxMaze(), bot.getyMaze()));
         directList.push((short)-1);
         
-        int current_x, current_y;
         short orient = Bot.DOWN;
         
-        while(!stack.empty()) {
+        while(true) {
             if(end) return;
-            Pair<Integer, Integer> current = stack.peek();
             
-            current_x = current.getFirst();
-            current_y = current.getSecond();
-            
-            getArround(current_x, current_y);
+            getArround(bot.getxMaze(), bot.getyMaze());
             
             this.track();
 
@@ -262,25 +221,9 @@ public class FindingProcess implements Runnable{
             if(isMultiWay()) orient = fixedGetWay();
                 
             if(orient != -1) {
-                switch(orient) {
-                    case Bot.UP:
-                        stack.push(new Pair<>(current_x, current_y-1));
-                        break;
-                    case Bot.DOWN:
-                        stack.push(new Pair<>(current_x, current_y+1));
-                        break;
-                    case Bot.RIGHT:
-                        stack.push(new Pair<>(current_x+1, current_y));
-                        break;
-                    case Bot.LEFT:
-                        stack.push(new Pair<>(current_x-1, current_y));
-                        break;
-                }
-               
                 bot.move(orient);
                 directList.push(orient);
             } else {
-                stack.pop();
                 if(directList.peek() == -1) {
                     goRandomAvailable();
                 } else bot.reverseMove(directList.peek());
@@ -308,23 +251,17 @@ public class FindingProcess implements Runnable{
         this.end = true;
     }
     private void findWayByTremaux_random() {
-        Stack<Pair<Integer, Integer> > stack = new Stack<>();
         Stack<Short> directList = new Stack<>();
         
-        stack.push(new Pair<>(bot.getxMaze(), bot.getyMaze()));
         directList.push((short)-1);
         
         int current_x, current_y;
         short orient = Bot.DOWN;
         
-        while(!stack.empty()) {
-            if(end) return;
-            Pair<Integer, Integer> current = stack.peek();
+        while(true) {
+            if(end) return;            
             
-            current_x = current.getFirst();
-            current_y = current.getSecond();
-            
-            getArround(current_x, current_y);
+            getArround(bot.getxMaze(), bot.getyMaze());
             
             this.track();
 
@@ -335,25 +272,9 @@ public class FindingProcess implements Runnable{
             if(isMultiWay()) orient = randomGetWay();
                 
             if(orient != -1) {
-                switch(orient) {
-                    case Bot.UP:
-                        stack.push(new Pair<>(current_x, current_y-1));
-                        break;
-                    case Bot.DOWN:
-                        stack.push(new Pair<>(current_x, current_y+1));
-                        break;
-                    case Bot.RIGHT:
-                        stack.push(new Pair<>(current_x+1, current_y));
-                        break;
-                    case Bot.LEFT:
-                        stack.push(new Pair<>(current_x-1, current_y));
-                        break;
-                }
-               
                 bot.move(orient);
                 directList.push(orient);
             } else {
-                stack.pop();
                 if(directList.peek() == -1) {
                     goRandomAvailable();
                 } else bot.reverseMove(directList.peek());
@@ -386,6 +307,7 @@ public class FindingProcess implements Runnable{
         short preWall = 0;
         
         while(true) {
+            if(end) return;
             getArround(bot.getxMaze(), bot.getyMaze());
             this.track();
              
